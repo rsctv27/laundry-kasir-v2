@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Kasir Laundry",
+    "slug": "laundry-kasir",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.example.laundrykasir"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "output": "single"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-secure-store",
+      "expo-font",
+      "react-native-thermal-printer-driver"
+    ],
+    "scheme": "laundrykasir",
+    "extra": {
+      "_note": "Nama, ikon, dan android.package masih sementara. Diganti di replica-brand sebelum rilis."
+    }
+  }
+}

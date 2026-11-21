@@ -1,5 +1,5 @@
 // S16: halaman lacak publik. Tanpa login; hanya menampilkan data yang aman untuk pemegang link.
-import { formatDateTime, formatRupiah, formatWa } from "@lk/shared";
+import { formatDateTime, formatRupiah } from "@lk/shared";
 import { Check, Clock, MapPin, MessageCircle, XCircle } from "lucide-react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -104,7 +104,7 @@ export default async function TrackingPage({ params }: { params: Promise<{ token
             href={`https://wa.me/${d.outlet.wa}`}
             className="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-border bg-surface-raised px-4 font-semibold text-fg"
           >
-            <MessageCircle aria-hidden className="size-5" /> Hubungi outlet ({formatWa(d.outlet.wa)})
+            <MessageCircle aria-hidden className="size-5" /> Chat outlet di WhatsApp
           </a>
         )}
       </section>

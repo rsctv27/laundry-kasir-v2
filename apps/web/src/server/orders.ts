@@ -1,7 +1,7 @@
 import { getSql } from "@lk/db";
 import {
   type AddPaymentInput, type CreateOrderInput, type HomeDto, type NotaDto, type OrderDetailDto, type OrderStatus,
-  type OrderSummaryDto, type Unit, checkPickup, checkStatusChange, formatQty, hundredthsToDecimal,
+  type OrderSummaryDto, type Unit, checkPickup, checkStatusChange, formatQty, formatWa, hundredthsToDecimal,
   lineTotal, localDate, localDayRange, notaNumber, paymentStatus, renderWhatsApp, toHundredths,
 } from "@lk/shared";
 import type postgres from "postgres";
@@ -271,7 +271,7 @@ export async function notaFor(ctx: Ctx, id: string): Promise<NotaDto> {
     from orders x join staff s on s.id = x.cashier_staff_id join outlets ou on ou.id = x.outlet_id where x.id = ${id}`;
   const lastPayment = o.payments[o.payments.length - 1];
   const nota = {
-    outlet: { name: meta!.o_name, address: meta!.o_address, phoneWa: meta!.o_wa ? `0${meta!.o_wa.slice(2)}` : null, footer: meta!.o_footer },
+    outlet: { name: meta!.o_name, address: meta!.o_address, phoneWa: meta!.o_wa ? formatWa(meta!.o_wa) : null, footer: meta!.o_footer },
     notaNumber: o.notaNumber,
     receivedAt: o.receivedAt,
     dueAt: o.dueAt,

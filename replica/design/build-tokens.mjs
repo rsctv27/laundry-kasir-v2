@@ -71,4 +71,22 @@ writeFileSync(
   header + "module.exports = " + JSON.stringify(preset, null, 2) + ";\n"
 );
 
-console.log("tokens.css, tailwind.css, tailwind.preset.cjs dibuat dari tokens.json");
+// 4. theme.gen.ts: token untuk aplikasi kasir (React Native, StyleSheet).
+const theme = {
+  color: colors,
+  status: Object.fromEntries(Object.entries(t.status).filter(([k]) => !k.startsWith("_"))),
+  type: typeScale,
+  space: t.space,
+  radius: t.radius,
+  control: Object.fromEntries(Object.entries(t.control).filter(([k]) => !k.startsWith("_"))),
+  layout: t.layout,
+  nota: { "58mm": t.nota["58mm"].columns, "80mm": t.nota["80mm"].columns },
+};
+writeFileSync(
+  join(here, "../../apps/kasir/src/theme.gen.ts"),
+  "// Dibuat otomatis dari replica/design/tokens.json oleh build-tokens.mjs. Jangan diedit manual.\n" +
+    "export const theme = " + JSON.stringify(theme, null, 2) + " as const;\n" +
+    "export type ColorRole = keyof typeof theme.color;\n",
+);
+
+console.log("tokens.css, tailwind.css, tailwind.preset.cjs, apps/kasir/src/theme.gen.ts dibuat dari tokens.json");
