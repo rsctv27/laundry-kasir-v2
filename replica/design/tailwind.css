@@ -45,6 +45,8 @@
   --text-display--line-height: var(--lk-text-display-line);
   --text-display--font-weight: var(--lk-text-display-weight);
   --spacing: 4px;
+  --container-kasir: 480px;
+  --container-owner: 1200px;
   --radius-sm: var(--lk-radius-sm);
   --radius-md: var(--lk-radius-md);
   --radius-lg: var(--lk-radius-lg);

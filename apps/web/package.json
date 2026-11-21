@@ -1,0 +1,38 @@
+{
+  "name": "@lk/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@lk/db": "workspace:*",
+    "@lk/shared": "workspace:*",
+    "better-auth": "^1.7",
+    "drizzle-orm": "^0.45",
+    "lucide-react": "^1",
+    "next": "^16",
+    "qrcode": "^1.5",
+    "react": "^19",
+    "react-dom": "^19",
+    "zod": "^4"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/qrcode": "^1.5",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "tsx": "^4",
+    "typescript": "^5.9",
+    "vitest": "^3"
+  }
+}

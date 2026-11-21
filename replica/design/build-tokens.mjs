@@ -44,6 +44,7 @@ for (const k of Object.keys(typeScale)) {
   tw += `  --text-${k}: var(--lk-text-${k});\n  --text-${k}--line-height: var(--lk-text-${k}-line);\n  --text-${k}--font-weight: var(--lk-text-${k}-weight);\n`;
 }
 tw += "  --spacing: 4px;\n";
+tw += `  --container-kasir: ${px(t.layout.kasir.max_width)};\n  --container-owner: ${px(t.layout.owner.content_max)};\n`;
 for (const k of Object.keys(t.radius)) tw += `  --radius-${k}: var(--lk-radius-${k});\n`;
 for (const k of Object.keys(t.shadow)) tw += `  --shadow-${k}: var(--lk-shadow-${k});\n`;
 tw += "}\n";

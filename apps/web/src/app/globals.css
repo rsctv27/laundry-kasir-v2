@@ -1,0 +1,9 @@
+@import "../../../../replica/design/tailwind.css";
+@source "../";
+
+@layer base {
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--lk-surface); color: var(--lk-text); font-family: var(--lk-font-sans); -webkit-font-smoothing: antialiased; }
+  :focus-visible { outline: 2px solid var(--lk-focus); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+}

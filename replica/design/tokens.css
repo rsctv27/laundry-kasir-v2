@@ -21,7 +21,7 @@
   --lk-warning-soft: #fdf1dc;
   --lk-info: #2456c9;
   --lk-info-soft: #e8eefc;
-  --lk-font-sans: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --lk-font-sans: Inter Variable, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --lk-font-mono: ui-monospace, SFMono-Regular, Menlo, Roboto Mono, monospace;
   --lk-text-xs: 12px;
   --lk-text-xs-line: 16px;
