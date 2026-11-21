@@ -1,0 +1,54 @@
+/* Dibuat otomatis dari tokens.json oleh build-tokens.mjs. Jangan diedit manual. */
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme inline {
+  --color-bg: var(--lk-bg);
+  --color-surface: var(--lk-surface);
+  --color-surface-raised: var(--lk-surface-raised);
+  --color-border: var(--lk-border);
+  --color-input: var(--lk-border-input);
+  --color-fg: var(--lk-text);
+  --color-muted: var(--lk-text-muted);
+  --color-accent: var(--lk-accent);
+  --color-accent-pressed: var(--lk-accent-pressed);
+  --color-accent-soft: var(--lk-accent-soft);
+  --color-on-accent: var(--lk-on-accent);
+  --color-focus: var(--lk-focus);
+  --color-danger: var(--lk-danger);
+  --color-danger-soft: var(--lk-danger-soft);
+  --color-on-danger: var(--lk-on-danger);
+  --color-success: var(--lk-success);
+  --color-success-soft: var(--lk-success-soft);
+  --color-warning: var(--lk-warning);
+  --color-warning-soft: var(--lk-warning-soft);
+  --color-info: var(--lk-info);
+  --color-info-soft: var(--lk-info-soft);
+  --font-sans: var(--lk-font-sans);
+  --font-mono: var(--lk-font-mono);
+  --text-xs: var(--lk-text-xs);
+  --text-xs--line-height: var(--lk-text-xs-line);
+  --text-xs--font-weight: var(--lk-text-xs-weight);
+  --text-sm: var(--lk-text-sm);
+  --text-sm--line-height: var(--lk-text-sm-line);
+  --text-sm--font-weight: var(--lk-text-sm-weight);
+  --text-base: var(--lk-text-base);
+  --text-base--line-height: var(--lk-text-base-line);
+  --text-base--font-weight: var(--lk-text-base-weight);
+  --text-lg: var(--lk-text-lg);
+  --text-lg--line-height: var(--lk-text-lg-line);
+  --text-lg--font-weight: var(--lk-text-lg-weight);
+  --text-xl: var(--lk-text-xl);
+  --text-xl--line-height: var(--lk-text-xl-line);
+  --text-xl--font-weight: var(--lk-text-xl-weight);
+  --text-display: var(--lk-text-display);
+  --text-display--line-height: var(--lk-text-display-line);
+  --text-display--font-weight: var(--lk-text-display-weight);
+  --spacing: 4px;
+  --radius-sm: var(--lk-radius-sm);
+  --radius-md: var(--lk-radius-md);
+  --radius-lg: var(--lk-radius-lg);
+  --radius-pill: var(--lk-radius-pill);
+  --shadow-card: var(--lk-shadow-card);
+  --shadow-pop: var(--lk-shadow-pop);
+}

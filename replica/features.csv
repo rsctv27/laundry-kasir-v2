@@ -1,0 +1,51 @@
+feature,area,priority,original,clone,notes
+Owner daftar akun dan buat usaha + outlet,onboarding,must,yes,no,S17; jurnal Kalesco
+Atur layanan dan harga (kiloan/satuan dan durasi),pengaturan,must,yes,no,S18; aslinya dinilai rumit (studi usability Bos)
+Buat akun kasir dan login per staf,akun,must,yes,no,"S01, S19"
+Beranda kasir dengan ringkasan hari ini (baru masuk / diproses / selesai),kasir,must,yes,no,S03; jurnal Kalesco
+Cari pelanggan lama otomatis saat mengetik,pelanggan,must,yes,no,S04
+Tambah pelanggan baru (nama / WA / alamat / tanggal lahir),pelanggan,must,yes,no,S04; jurnal SS Laundry
+Buat transaksi: pilih layanan dan isi berat kg atau jumlah pcs,transaksi,must,yes,no,S05
+Beberapa layanan dalam satu nota,transaksi,must,yes,no,S05; perlu dicek di UI asli
+Total tagihan dihitung otomatis,transaksi,must,yes,no,S06
+Bayar tunai dengan hitung kembalian,pembayaran,must,yes,no,S06
+Bayar nanti saat pengambilan,pembayaran,must,yes,no,"S06; opsi ""Nanti"" di jurnal Kalesco"
+Bayar QRIS (mulai dari QRIS statis outlet),pembayaran,must,yes,no,S06; QRIS dinamis di baris terpisah
+Nomor nota unik per outlet,nota,must,yes,no,S07
+Cetak nota thermal (rangkap pelanggan + label produksi),nota,must,yes,no,S07; nota biru/merah di jurnal Kalesco
+Kirim nota lewat WhatsApp,nota,must,yes,no,S07; mulai dari link wa.me (manual)
+Halaman lacak cucian untuk pelanggan dari link di nota,nota,must,yes,no,S16; jurnal SS Laundry
+Daftar cucian per status dengan pencarian nota / nama,status,must,yes,no,S08
+Ubah status cucian (baru / diproses / selesai),status,must,yes,no,S09
+Ambil dan pelunasan,pengambilan,must,yes,no,S10; tunai / debit / e-money
+Catat pengeluaran harian,keuangan,must,yes,no,S11
+Statistik harian (omzet / kas diterima / nota terambil / total kg),keuangan,must,yes,no,S12
+Rekap transaksi per periode dan daftar belum lunas,keuangan,must,yes,no,S12
+Laporan keuangan owner (pemasukan / pengeluaran / laba),keuangan,must,yes,no,S21; versi sederhana dulu
+Dashboard owner (omzet dan transaksi per periode),owner,must,yes,no,S20
+Rincian jenis barang per order (handuk / selimut / seprai / bedcover),transaksi,should,yes,no,S05
+Bayar debit / EDC (dicatat manual),pembayaran,should,yes,no,S06
+QRIS dinamis lewat payment gateway,pembayaran,should,yes,no,butuh akun merchant + webhook
+WhatsApp otomatis (nota dan notifikasi siap diambil),nota,should,yes,no,butuh WhatsApp Business Platform resmi
+Ambil tanpa pelunasan dengan persetujuan owner (utang terbawa ke transaksi berikutnya),pengambilan,should,yes,no,F06; fitur unggulan di smartlink.id/fitur
+Deposit pelanggan (top up dan bayar dari saldo),pelanggan,should,yes,no,"S14, F09; Play Store: perbaikan bug transaksi deposit"
+Riwayat transaksi per pelanggan,pelanggan,should,yes,no,S13
+Cari order dengan scan QR nota,pengambilan,should,yes,no,F05
+Absensi kasir dalam radius lokasi outlet,karyawan,should,yes,no,"S02, F10"
+Multi outlet dalam satu akun owner,owner,should,yes,no,data model sudah mendukung
+Level akses (supervisor / koordinator),akun,should,yes,no,S19
+Diskon dan promo outlet,transaksi,should,yes,no,ulasan Play Store minta diskon per layanan
+Pengaturan kepala nota dan template pesan WhatsApp,pengaturan,should,yes,no,S22
+Jadwal antar-jemput,operasional,could,yes,no,S15
+Aplikasi produksi (tahap cuci / setrika / packing),produksi,could,yes,no,tahap berikutnya setelah inti kasir
+Manajemen kurir,operasional,could,yes,no,Play Store
+Akuntansi penuh (jurnal umum / buku besar / neraca / perubahan modal),keuangan,could,yes,no,jurnal Kalesco
+Payroll (gaji / borongan / komisi / lembur / kasbon / slip),karyawan,could,yes,no,smartlink.id/fitur + jurnal Kalesco
+Manajemen inventori,operasional,could,yes,no,smartlink.id/fitur
+Faktur tagihan massal,keuangan,could,yes,no,smartlink.id/fitur
+WhatsApp blast,pemasaran,could,yes,no,smartlink.id/biaya
+Kirim nota lewat SMS,nota,could,yes,no,jurnal Kalesco
+Aplikasi investor (lihat transaksi dan laporan),owner,could,yes,no,jurnal SS Laundry
+Bayar dengan e-wallet langsung,pembayaran,could,yes,no,QRIS sudah mencakup sebagian besar e-wallet
+Kontrol mesin IoT,iot,could,yes,skip,butuh perangkat Snapbridge dan kemitraan mereka
+Sistem koin dan biaya aktivasi per outlet,model bisnis,could,yes,skip,model bisnis bukan fitur; harga ditentukan di replica-launch

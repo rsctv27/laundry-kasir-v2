@@ -1,0 +1,13 @@
+{
+  "name": "laundry-kasir",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "tokens": "node replica/design/build-tokens.mjs"
+  },
+  "devDependencies": {}
+}
