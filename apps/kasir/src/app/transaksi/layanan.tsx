@@ -4,7 +4,7 @@ import { Redirect, router } from "expo-router";
 import { Check, Clock, Minus, Plus, Shirt } from "lucide-react-native";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import { AppHeader, ActionBar, Body } from "@/components/screen";
-import { Banner, Button, c, Card, EmptyState, IconButton, Skeleton, sp, Txt } from "@/components/ui";
+import { Banner, Button, c, Card, EmptyState, IconButton, noOutline, Skeleton, sp, Txt } from "@/components/ui";
 import { api } from "@/lib/api";
 import { safeLineTotal, useDraft, type DraftLine } from "@/lib/draft";
 import { useLoad } from "@/lib/use-load";
@@ -120,5 +120,5 @@ const st = StyleSheet.create({
   qtyRow: { flexDirection: "row", alignItems: "center", gap: sp(3), paddingVertical: sp(3) },
   stepper: { flexDirection: "row", alignItems: "center", gap: 4 },
   qtyBox: { width: 92, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4 },
-  qtyInput: { width: 56, minWidth: 0, textAlign: "right", fontFamily: "Inter_600SemiBold", fontSize: theme.type.lg.size, color: c.text, fontVariant: ["tabular-nums"], paddingVertical: 0, borderBottomWidth: 2, borderBottomColor: c["border-input"], outlineWidth: 0 },
+  qtyInput: { width: 56, minWidth: 0, textAlign: "right", fontFamily: "Inter_600SemiBold", fontSize: theme.type.lg.size, color: c.text, fontVariant: ["tabular-nums"], paddingVertical: 0, borderBottomWidth: 2, borderBottomColor: c["border-input"], ...noOutline },
 });

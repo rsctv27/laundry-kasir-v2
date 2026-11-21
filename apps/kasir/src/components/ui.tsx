@@ -2,12 +2,14 @@
 import { Check, type LucideIcon } from "lucide-react-native";
 import { forwardRef, useState } from "react";
 import {
-  ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View,
+  ActivityIndicator, Platform, Pressable, StyleSheet, Text, TextInput, View,
   type PressableProps, type StyleProp, type TextInputInstance, type TextInputProps, type TextProps, type TextStyle, type ViewStyle,
 } from "react-native";
 import { theme, type ColorRole } from "@/theme.gen";
 
 export const c = theme.color;
+/** Versi web: matikan outline bawaan browser; fokus sudah ditandai border sesuai desain. */
+export const noOutline = (Platform.OS === "web" ? { outlineStyle: "none" } : {}) as TextStyle;
 export const sp = (i: number) => theme.space[i] ?? 0;
 
 const FAMILY: Record<number, string> = { 400: "Inter_400Regular", 500: "Inter_500Medium", 600: "Inter_600SemiBold", 700: "Inter_700Bold" };
@@ -168,7 +170,7 @@ export const s = StyleSheet.create({
   btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: sp(2), paddingHorizontal: sp(4), borderRadius: theme.radius.md, borderWidth: 1 },
   iconBtn: { width: theme.control.md, height: theme.control.md, alignItems: "center", justifyContent: "center", borderRadius: theme.radius.md },
   input: { minHeight: theme.control.md, flexDirection: "row", alignItems: "center", gap: sp(2), paddingHorizontal: sp(3), borderWidth: 1, borderColor: c["border-input"], borderRadius: theme.radius.md, backgroundColor: c.bg },
-  inputText: { flex: 1, minHeight: theme.control.md - 4, fontSize: theme.type.base.size, fontFamily: "Inter_400Regular", color: c.text, paddingVertical: 0, outlineWidth: 0 } as TextStyle, // fokus ditandai border, bukan outline browser
+  inputText: { flex: 1, minHeight: theme.control.md - 4, fontSize: theme.type.base.size, fontFamily: "Inter_400Regular", color: c.text, paddingVertical: 0, ...noOutline } as TextStyle,
   card: { backgroundColor: c["surface-raised"], borderWidth: 1, borderColor: c.border, borderRadius: theme.radius.lg, padding: sp(4) },
   badge: { height: 24, paddingHorizontal: 10, borderRadius: theme.radius.pill, alignItems: "center", justifyContent: "center", alignSelf: "flex-start" },
   banner: { flexDirection: "row", alignItems: "center", gap: sp(2) + 2, paddingVertical: sp(2) + 2, paddingHorizontal: sp(4) },
