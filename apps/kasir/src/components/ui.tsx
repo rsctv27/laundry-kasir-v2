@@ -168,7 +168,7 @@ export const s = StyleSheet.create({
   btn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: sp(2), paddingHorizontal: sp(4), borderRadius: theme.radius.md, borderWidth: 1 },
   iconBtn: { width: theme.control.md, height: theme.control.md, alignItems: "center", justifyContent: "center", borderRadius: theme.radius.md },
   input: { minHeight: theme.control.md, flexDirection: "row", alignItems: "center", gap: sp(2), paddingHorizontal: sp(3), borderWidth: 1, borderColor: c["border-input"], borderRadius: theme.radius.md, backgroundColor: c.bg },
-  inputText: { flex: 1, minHeight: theme.control.md - 4, fontSize: theme.type.base.size, fontFamily: "Inter_400Regular", color: c.text, paddingVertical: 0 } as TextStyle,
+  inputText: { flex: 1, minHeight: theme.control.md - 4, fontSize: theme.type.base.size, fontFamily: "Inter_400Regular", color: c.text, paddingVertical: 0, outlineWidth: 0 } as TextStyle, // fokus ditandai border, bukan outline browser
   card: { backgroundColor: c["surface-raised"], borderWidth: 1, borderColor: c.border, borderRadius: theme.radius.lg, padding: sp(4) },
   badge: { height: 24, paddingHorizontal: 10, borderRadius: theme.radius.pill, alignItems: "center", justifyContent: "center", alignSelf: "flex-start" },
   banner: { flexDirection: "row", alignItems: "center", gap: sp(2) + 2, paddingVertical: sp(2) + 2, paddingHorizontal: sp(4) },
