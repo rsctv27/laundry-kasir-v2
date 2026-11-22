@@ -1,6 +1,6 @@
 # Build log: laundry-kasir
 
-Milestone 0 (uji printer) dan Milestone 1 (alur inti kasir) dari `architecture.md`. Tanggal: 2026-11-22.
+Milestone 0 (uji printer), Milestone 1 (alur inti kasir), dan Milestone 2 (keuangan + versi web HP & desktop). Terakhir diperbarui: 2026-11-22.
 
 ## Per layar
 
@@ -54,3 +54,49 @@ Milestone 0 (uji printer) dan Milestone 1 (alur inti kasir) dari `architecture.m
 
 1. **Milestone 0 di HP sungguhan**: build APK development, sambungkan printer outlet, uji cetak. Kalau gagal, ganti driver di `apps/kasir/src/printer/driver.native.ts` saja.
 2. **Milestone 2**: kas & pengeluaran (S11), statistik harian (S12), dashboard & laporan owner (S20/S21), ubah/nonaktifkan layanan, batalkan nota.
+
+---
+
+# Milestone 2 (2026-11-22): keuangan + versi web HP & desktop
+
+## Per layar
+
+| ID | layar | status | yang belum | lebih sulit dari perkiraan |
+| --- | --- | --- | --- | --- |
+| S11 | Kas: pengeluaran | done | — | — |
+| S12 | Kas: statistik harian | done | — | `sum()` bigint di Postgres jadi numeric (terkirim sebagai teks); semua penjumlahan di-cast ke bigint |
+| S04 | Pelanggan baru | done | — | — |
+| S06/S10 | QRIS | done | QRIS dinamis (M3) | — |
+| S09 | Batalkan nota | done | pembatalan nota yang sudah dibayar (butuh pengembalian dana) | — |
+| S18 | Layanan & harga | done | urutan tampilan manual | — |
+| S19 | Karyawan | partial | ubah peran, reset password, nonaktifkan | — |
+| S20 | Dashboard pemilik | done | — | — |
+| S21 | Laporan keuangan | done | akuntansi berpasangan (could) | tanggal per zona waktu outlet di SQL (`at time zone`) |
+| S22 | Pengaturan outlet | partial | template WA, persetujuan bayar-nanti | — |
+| Web | Kasir versi web HP & desktop | done | mode offline | lebar menu samping bawaan React Navigation (360 px) harus dikunci ke token |
+
+## Versi web HP & desktop (permintaan baru)
+
+- Aplikasi kasir yang sama berjalan di browser HP dan komputer. Di layar < 1024 px: bilah menu bawah. Di layar ≥ 1024 px: menu samping, konten terpusat (maks. 760 px; daftar 1040 px), dan grid layanan 4 kolom.
+- PWA: manifest, ikon 192/512/maskable, `lang="id"`. Bisa dipasang ke layar utama HP atau sebagai aplikasi di Windows/Mac lewat menu browser. Belum ada service worker (belum bisa offline).
+- Cetak di versi web: nota dirender selebar 58/80 mm (font menyesuaikan 32/48 karakter) lalu dibuka di dialog cetak browser, termasuk label produksi di halaman terpisah. Diuji sampai dialog terbuka; hasil di printer fisik belum diuji.
+- Web pemilik juga responsif: menu samping di desktop, bilah atas + laci di HP.
+
+## Pengujian (semua lulus)
+
+- `packages/shared`: 20 tes unit.
+- `apps/web`: 28 tes API (18 lama + 10 keuangan: pengeluaran idempotent & aturan tanggal/hapus, statistik harian dicocokkan angka per angka, laporan periode, batalkan nota, ubah/nonaktifkan layanan, catatan kaki nota, gambar QRIS dicek isinya & batas 512 KB, isolasi antar usaha).
+- `apps/kasir/e2e/kasir_flow.py`: 19/19 (alur inti, diperbarui untuk halaman pemilik baru dan cetak lewat browser).
+- `apps/kasir/e2e/m2_flow.py`: 28/28 di HP 390 px dan desktop 1440 px, 0 console error, lulus dua kali berturut-turut.
+
+## Keputusan
+
+- Gambar QRIS disimpan di database (`outlet_files`, maks. 512 KB, migrasi `0002`), bukan Supabase Storage: satu layanan lebih sedikit, cukup untuk satu gambar per outlet.
+- "Laba kas" = uang masuk − pengeluaran (basis kas), diberi keterangan di layar. Omzet = nilai nota masuk (nota batal tidak dihitung).
+- Warna grafik: dua seri dari palet kategori panduan dataviz, divalidasi `validate_palette.js` (ΔE CVD 24,7) dan masuk tokens.json sebagai `series-1`/`series-2`.
+- `scripts/seed-history.ts`: riwayat 14 hari khusus demo pengembangan (menulis langsung ke database, menolak berjalan di production).
+
+## Berikutnya
+
+1. Uji cetak di printer fisik (Android Bluetooth dan/atau komputer lewat browser).
+2. Milestone 3: deposit pelanggan, ambil tanpa pelunasan + persetujuan, absensi, rincian jenis barang, promo, tambah outlet lewat UI, QRIS dinamis, WhatsApp otomatis.

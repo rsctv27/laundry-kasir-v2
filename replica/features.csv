@@ -1,41 +1,41 @@
 feature,area,priority,original,clone,notes
 Owner daftar akun dan buat usaha + outlet,onboarding,must,yes,yes,S17; web /daftar + /setup; diuji e2e
-Atur layanan dan harga (kiloan/satuan dan durasi),pengaturan,must,yes,partial,S18: tambah layanan sudah; ubah/nonaktifkan belum
+Atur layanan dan harga (kiloan/satuan dan durasi),pengaturan,must,yes,yes,"S18: tambah, ubah, nonaktifkan; nota lama tetap"
 Buat akun kasir dan login per staf,akun,must,yes,yes,S19 + S01; kode usaha + username; diuji e2e
 Beranda kasir dengan ringkasan hari ini (baru masuk / diproses / selesai),kasir,must,yes,yes,S03
 Cari pelanggan lama otomatis saat mengetik,pelanggan,must,yes,yes,"S04; trigram, toleran salah ketik + nomor"
-Tambah pelanggan baru (nama / WA / alamat / tanggal lahir),pelanggan,must,yes,partial,S04: nama/WA/alamat; tanggal lahir belum
+Tambah pelanggan baru (nama / WA / alamat / tanggal lahir),pelanggan,must,yes,yes,S04 termasuk tanggal lahir
 Buat transaksi: pilih layanan dan isi berat kg atau jumlah pcs,transaksi,must,yes,yes,S05; berat desimal koma
 Beberapa layanan dalam satu nota,transaksi,must,yes,yes,S05; urutan baris terjaga (migrasi 0001)
 Total tagihan dihitung otomatis,transaksi,must,yes,yes,dihitung ulang di server
 Bayar tunai dengan hitung kembalian,pembayaran,must,yes,yes,S06 + S10
 Bayar nanti saat pengambilan,pembayaran,must,yes,yes,S06 -> pelunasan di S10
-Bayar QRIS (mulai dari QRIS statis outlet),pembayaran,must,yes,partial,dicatat dengan konfirmasi kasir; unggah gambar QRIS outlet belum
+Bayar QRIS (mulai dari QRIS statis outlet),pembayaran,must,yes,yes,gambar QRIS outlet (diunggah pemilik) + konfirmasi kasir
 Nomor nota unik per outlet,nota,must,yes,yes,OUTLET-YYMMDD-NNN; aman saat bersamaan (diuji 10 paralel)
-Cetak nota thermal (rangkap pelanggan + label produksi),nota,must,yes,partial,ESC/POS + driver Bluetooth selesai; belum diuji di printer fisik (Milestone 0)
+Cetak nota thermal (rangkap pelanggan + label produksi),nota,must,yes,partial,Android: driver Bluetooth belum diuji di printer fisik. Web: cetak lewat dialog browser (58/80 mm) sudah
 Kirim nota lewat WhatsApp,nota,must,yes,yes,link wa.me + log pesan
 Halaman lacak cucian untuk pelanggan dari link di nota,nota,must,yes,yes,S16; tanpa data pribadi; noindex
 Daftar cucian per status dengan pencarian nota / nama,status,must,yes,yes,S08; paginasi cursor
 Ubah status cucian (baru / diproses / selesai),status,must,yes,yes,S09; mundur hanya supervisor + alasan
 Ambil dan pelunasan,pengambilan,must,yes,yes,S10; harus selesai + lunas
-Catat pengeluaran harian,keuangan,must,yes,no,Milestone 2
-Statistik harian (omzet / kas diterima / nota terambil / total kg),keuangan,must,yes,no,Milestone 2
-Rekap transaksi per periode dan daftar belum lunas,keuangan,must,yes,no,Milestone 2
-Laporan keuangan owner (pemasukan / pengeluaran / laba),keuangan,must,yes,no,Milestone 2
-Dashboard owner (omzet dan transaksi per periode),owner,must,yes,no,Milestone 2; dashboard saat ini hanya layanan + staf
+Catat pengeluaran harian,keuangan,must,yes,yes,S11; idempotent; aturan tanggal & hapus
+Statistik harian (omzet / kas diterima / nota terambil / total kg),keuangan,must,yes,yes,S12 + per cara bayar + perkiraan tunai di laci
+Rekap transaksi per periode dan daftar belum lunas,keuangan,must,yes,yes,laporan periode + daftar belum lunas di Kas
+Laporan keuangan owner (pemasukan / pengeluaran / laba),keuangan,must,yes,yes,"S21: per hari, per cara bayar, per jenis pengeluaran, per outlet; CSV & cetak. Akuntansi penuh tetap could"
+Dashboard owner (omzet dan transaksi per periode),owner,must,yes,yes,S20 + grafik uang masuk vs pengeluaran
 Rincian jenis barang per order (handuk / selimut / seprai / bedcover),transaksi,should,yes,no,S05
 Bayar debit / EDC (dicatat manual),pembayaran,should,yes,yes,S06/S10 dengan konfirmasi
 QRIS dinamis lewat payment gateway,pembayaran,should,yes,no,butuh akun merchant + webhook
-WhatsApp otomatis (nota dan notifikasi siap diambil),nota,should,yes,partial,tombol kabari siap diambil (manual wa.me); otomatis belum
+WhatsApp otomatis (nota dan notifikasi siap diambil),nota,should,yes,partial,"manual lewat wa.me: nota, kabar siap diambil, ringkasan harian ke pemilik; otomatis belum"
 Ambil tanpa pelunasan dengan persetujuan owner (utang terbawa ke transaksi berikutnya),pengambilan,should,yes,no,F06; fitur unggulan di smartlink.id/fitur
 Deposit pelanggan (top up dan bayar dari saldo),pelanggan,should,yes,no,"S14, F09; Play Store: perbaikan bug transaksi deposit"
 Riwayat transaksi per pelanggan,pelanggan,should,yes,no,S13
 Cari order dengan scan QR nota,pengambilan,should,yes,no,F05
 Absensi kasir dalam radius lokasi outlet,karyawan,should,yes,no,"S02, F10"
-Multi outlet dalam satu akun owner,owner,should,yes,partial,data model + API (header x-outlet-id) siap; UI belum
-Level akses (supervisor / koordinator),akun,should,yes,partial,peran supervisor bisa dibuat; aturan mundur status berlaku; pembatalan nota belum
+Multi outlet dalam satu akun owner,owner,should,yes,partial,laporan & dashboard bisa per outlet / semua; tambah outlet lewat UI belum
+Level akses (supervisor / koordinator),akun,should,yes,partial,"supervisor: batalkan nota, mundur status, laporan; pengaturan per izin belum"
 Diskon dan promo outlet,transaksi,should,yes,no,ulasan Play Store minta diskon per layanan
-Pengaturan kepala nota dan template pesan WhatsApp,pengaturan,should,yes,no,S22
+Pengaturan kepala nota dan template pesan WhatsApp,pengaturan,should,yes,partial,catatan kaki nota sudah; template WA belum
 Jadwal antar-jemput,operasional,could,yes,no,S15
 Aplikasi produksi (tahap cuci / setrika / packing),produksi,could,yes,no,tahap berikutnya setelah inti kasir
 Manajemen kurir,operasional,could,yes,no,Play Store
@@ -49,3 +49,4 @@ Aplikasi investor (lihat transaksi dan laporan),owner,could,yes,no,jurnal SS Lau
 Bayar dengan e-wallet langsung,pembayaran,could,yes,no,QRIS sudah mencakup sebagian besar e-wallet
 Kontrol mesin IoT,iot,could,yes,skip,butuh perangkat Snapbridge dan kemitraan mereka
 Sistem koin dan biaya aktivasi per outlet,model bisnis,could,yes,skip,model bisnis bukan fitur; harga ditentukan di replica-launch
+"Aplikasi kasir versi web (HP & desktop, PWA)",platform,should,no,yes,"permintaan Rico, di luar Smartlink (kasir Smartlink hanya Android)"
