@@ -1,11 +1,13 @@
 // HANYA UNTUK DEMO PENGEMBANGAN: mengisi riwayat 14 hari ke belakang untuk usaha contoh ("contoh"),
 // supaya dashboard dan laporan punya isi. Order masa lalu tidak bisa dibuat lewat API (waktu selalu "sekarang"),
-// jadi skrip ini menulis langsung ke database. Menolak berjalan di production.
+// jadi skrip ini menulis langsung ke database. Menolak berjalan di production kecuali SEED_DEMO=1 (situs uji coba).
 //   pnpm --filter @lk/web tsx scripts/seed-history.ts
 import { getSql } from "@lk/db";
 import { lineTotal, notaNumber, paymentStatus, hundredthsToDecimal, toHundredths } from "@lk/shared";
 
-if (process.env.NODE_ENV === "production") throw new Error("seed-history tidak boleh dijalankan di production");
+if (process.env.NODE_ENV === "production" && process.env.SEED_DEMO !== "1") {
+  throw new Error("seed-history tidak boleh dijalankan di production tanpa SEED_DEMO=1");
+}
 
 async function main() {
   const sql = getSql();

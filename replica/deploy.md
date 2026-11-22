@@ -117,4 +117,7 @@ Belum ada email keluar, jadi SPF/DKIM/DMARC belum perlu.
 - Fungsi: sin1 (Singapura), Node 22
 - Proteksi: Vercel Authentication untuk preview dan URL per-deploy; domain produksi terbuka (perlu untuk kasir dan link lacak pelanggan)
 - Cek di situs live (browser cloud): beranda 200, `/kasir` -> layar masuk kasir, `/t/<token palsu>` -> "Link tidak ditemukan" (query database jalan), `/api/v1/me` -> 401, log runtime tanpa error
-- Alur daftar sampai transaksi di situs live: dilakukan Rico sendiri di HP (Claude tidak membuat akun atau mengetik password di situs live)
+- Alur daftar sampai transaksi di situs live: dilakukan Rico sendiri di HP (Claude tidak mengetik password di situs live)
+- Usaha demo "contoh" berisi data dummy (5 layanan, 5 pelanggan, ~100 nota 14 hari, pengeluaran) dibuat saat build karena
+  env `SEED_DEMO=1` (production). Akunnya sama dengan `apps/web/scripts/seed.ts`. Siapa pun yang tahu akun itu bisa masuk
+  ke usaha demo, jadi jangan isi data asli di sana. Saat peluncuran: hapus `SEED_DEMO` dan hapus usaha demo.

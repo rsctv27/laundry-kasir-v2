@@ -27,5 +27,11 @@ if (process.env.SKIP_MIGRATE !== "1") {
     env: { ...process.env, DATABASE_URL: url },
   });
 }
+if (process.env.SEED_DEMO === "1") {
+  // Situs uji coba: usaha demo "contoh" berisi data dummy (sekali saja; dilewati bila sudah ada).
+  const env = { ...process.env, DATABASE_URL: process.env.DATABASE_URL || process.env.DATABASE_URL_UNPOOLED };
+  run("npx", ["tsx", join(webDir, "scripts", "seed.ts")], { env });
+  run("npx", ["tsx", join(webDir, "scripts", "seed-history.ts")], { env });
+}
 run("node", [join(webDir, "scripts", "bundle-kasir.mjs")]);
 run("npx", ["next", "build"]);

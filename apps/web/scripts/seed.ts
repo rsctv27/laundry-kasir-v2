@@ -1,12 +1,14 @@
-// Data contoh untuk pengembangan, dimasukkan lewat API yang sama dengan aplikasi (bukan SQL langsung).
+// Data contoh untuk pengembangan dan situs uji coba, dimasukkan lewat API yang sama dengan aplikasi (bukan SQL langsung).
 //   pnpm --filter @lk/web seed
+// Di Vercel: jalan saat build bila SEED_DEMO=1 (lihat scripts/vercel-build.mjs). Usaha "contoh" terpisah dari usaha lain.
 // Owner: owner@contoh.id / rahasia123 · Kasir: kode usaha "contoh", username "dewi", password "kasir123"
 import { getSql } from "@lk/db";
 import type { MeDto, OrderDetailDto, ServiceDto } from "@lk/shared";
 import { POST as authPost } from "../src/app/api/auth/[...all]/route";
+import { siteUrl } from "../src/server/env";
 import { dispatch } from "../src/server/router";
 
-const BASE = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+const BASE = process.env.BETTER_AUTH_URL || siteUrl();
 const H = { "content-type": "application/json", origin: BASE };
 
 async function auth(path: string, body: unknown) {
