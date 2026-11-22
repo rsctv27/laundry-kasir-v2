@@ -1,6 +1,6 @@
 # Deploy checklist: laundry-kasir (nama sementara), versi uji coba
 
-Tanggal: 2026-11-22  Commit: faec8e8  Izin dari Rico untuk go live: **belum**
+Tanggal: 2026-11-22  Commit: 411b6bc  Izin dari Rico: **ya** ("Use Vercel for this"), deploy uji coba
 
 Jenis deploy: **uji coba (staging)**, bukan peluncuran publik. Situs memakai `noindex` (tidak muncul di Google),
 nama dan ikon masih sementara. Peluncuran publik menunggu replica-brand dan daftar "Sebelum peluncuran" di bawah.
@@ -108,4 +108,13 @@ Belum ada email keluar, jadi SPF/DKIM/DMARC belum perlu.
 - [ ] printer thermal fisik diuji (Android) atau cukup cetak browser untuk versi web
 - [ ] nama pengelola dan kontak di /privasi dan /ketentuan
 
-URL live: belum (menunggu langkah Rico).
+## Hasil deploy
+
+- URL live: **https://laundry-kasir-dusky.vercel.app** (kasir: `/kasir`)
+- Vercel: proyek `laundry-kasir` (prj_oMvB9E9xrnQZog27gLnesBloN0fb), akun ricosc27-3524, Hobby
+- Repo: github.com/rsctv27/laundry-kasir-v2, branch `main` (push = deploy produksi otomatis)
+- Database: Neon lewat Vercel Marketplace, Singapura; migrasi 0000-0002 jalan di build pertama
+- Fungsi: sin1 (Singapura), Node 22
+- Proteksi: Vercel Authentication untuk preview dan URL per-deploy; domain produksi terbuka (perlu untuk kasir dan link lacak pelanggan)
+- Cek di situs live (browser cloud): beranda 200, `/kasir` -> layar masuk kasir, `/t/<token palsu>` -> "Link tidak ditemukan" (query database jalan), `/api/v1/me` -> 401, log runtime tanpa error
+- Alur daftar sampai transaksi di situs live: dilakukan Rico sendiri di HP (Claude tidak membuat akun atau mengetik password di situs live)
