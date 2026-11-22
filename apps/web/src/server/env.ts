@@ -1,3 +1,5 @@
+import { createHmac } from "node:crypto";
+
 // Alamat situs dan origin yang dipercaya, untuk lokal maupun Vercel.
 // Di Vercel, VERCEL_PROJECT_PRODUCTION_URL, VERCEL_URL, dan VERCEL_BRANCH_URL diisi otomatis (tanpa https://).
 
@@ -22,4 +24,18 @@ export function trustedOrigins(): string[] {
     if (o && !list.includes(o)) list.push(o);
   }
   return list.map(trim);
+}
+
+/**
+ * Rahasia untuk menandatangani sesi login.
+ * Pakai BETTER_AUTH_SECRET bila diisi. Bila kosong, diturunkan dari DATABASE_URL (berisi kata sandi database acak
+ * dari penyedia), jadi tidak ada rahasia yang perlu diketik atau dikirim lewat chat. Kalau kata sandi database
+ * diganti, semua pengguna cukup login ulang.
+ */
+export function authSecret(): string | undefined {
+  const explicit = process.env.BETTER_AUTH_SECRET;
+  if (explicit) return explicit;
+  const db = process.env.DATABASE_URL;
+  if (!db || process.env.NODE_ENV !== "production") return undefined;
+  return createHmac("sha256", db).update("laundry-kasir/better-auth-secret/v1").digest("base64url");
 }

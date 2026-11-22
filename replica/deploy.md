@@ -54,14 +54,14 @@ Kasir web dan web pemilik satu origin, jadi tidak perlu CORS dan login kasir mem
 | --- | --- | --- |
 | `DATABASE_URL` | koneksi pooled Neon | otomatis oleh integrasi Neon |
 | `DATABASE_URL_UNPOOLED` | koneksi langsung Neon, untuk migrasi | otomatis oleh integrasi Neon |
-| `BETTER_AUTH_SECRET` | string acak minimal 32 karakter | **Rico**: tombol "Generate Secret" di better-auth.com/docs/installation atau `openssl rand -base64 32`. Jangan dikirim di chat. |
+| `BETTER_AUTH_SECRET` | opsional. Bila kosong, rahasia sesi diturunkan dari `DATABASE_URL` (HMAC-SHA256), jadi tidak ada rahasia yang diketik atau dikirim lewat chat. Isi sendiri (min. 32 karakter) kapan saja; pengguna cukup login ulang. | Rico, opsional |
 | `DATABASE_POOL_MAX` | `3` | Rico (disarankan untuk serverless) |
 | `DATABASE_POOL_MAX_AUTH` | `2` | Rico (disarankan) |
 | `BETTER_AUTH_URL`, `PUBLIC_BASE_URL` | kosongkan dulu; otomatis memakai alamat produksi Vercel. Isi `https://domain-anda` setelah pasang domain sendiri. | Rico, nanti |
 | `CORS_ORIGINS` | kosongkan (hanya untuk kasir web di origin lain saat pengembangan) | - |
 | `ALLOW_INDEXING` | jangan diisi selama uji coba (`1` = boleh muncul di Google) | Rico, saat peluncuran |
 
-Build berhenti dengan pesan jelas bila `BETTER_AUTH_SECRET` atau `DATABASE_URL` belum ada.
+Build berhenti dengan pesan jelas bila `DATABASE_URL` belum ada (database belum ditambahkan).
 
 ## Langkah Rico (akun atas nama Rico, Claude tidak memasukkan password atau kunci)
 
@@ -72,7 +72,7 @@ Build berhenti dengan pesan jelas bila `BETTER_AUTH_SECRET` atau `DATABASE_URL` 
    - Framework: Next.js (terdeteksi). Build & install command sudah diatur di `vercel.json`, biarkan.
 3. **Database**: di proyek Vercel, tab Storage, tambah **Neon**, region **Singapore**, hubungkan ke proyek
    untuk Production dan Preview.
-4. **Secret**: Settings, Environment Variables, tambah `BETTER_AUTH_SECRET`, `DATABASE_POOL_MAX=3`, `DATABASE_POOL_MAX_AUTH=2`.
+4. **Env lain**: `DATABASE_POOL_MAX=3`, `DATABASE_POOL_MAX_AUTH=2` (diisi Claude lewat connector Vercel). Tidak ada rahasia yang perlu diisi.
 5. **Deploy**: Deployments, Redeploy (atau push baru). Setelah hijau, kirim alamat `https://....vercel.app` ke Claude.
 6. Claude menjalankan `first_run.py` ke alamat itu (membuat satu "Laundry Uji Otomatis" yang boleh dihapus),
    lalu Rico mencoba sendiri di HP: daftar, siapkan usaha, buat akun kasir, buka `/kasir`, pasang ke layar utama.

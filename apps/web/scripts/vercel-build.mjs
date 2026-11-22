@@ -10,8 +10,9 @@ import { fileURLToPath } from "node:url";
 const webDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { cwd: webDir, stdio: "inherit", ...opts });
 
-if (process.env.VERCEL && (process.env.BETTER_AUTH_SECRET ?? "").length < 32) {
-  console.error("BETTER_AUTH_SECRET belum diisi (minimal 32 karakter) di Environment Variables Vercel. Build dihentikan.");
+const secret = process.env.BETTER_AUTH_SECRET ?? "";
+if (process.env.VERCEL && secret && secret.length < 32) {
+  console.error("BETTER_AUTH_SECRET terlalu pendek (minimal 32 karakter). Kosongkan saja untuk memakai rahasia turunan dari DATABASE_URL.");
   process.exit(1);
 }
 
@@ -19,7 +20,7 @@ if (process.env.SKIP_MIGRATE !== "1") {
   // Migrasi lewat koneksi langsung (bukan pooler) bila tersedia.
   const url = process.env.MIGRATE_DATABASE_URL || process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
   if (!url) {
-    console.error("DATABASE_URL belum diisi di Environment Variables Vercel. Build dihentikan.");
+    console.error("DATABASE_URL belum ada. Tambahkan database Neon di tab Storage proyek Vercel, lalu deploy ulang.");
     process.exit(1);
   }
   run("npx", ["tsx", join(webDir, "..", "..", "packages", "db", "src", "migrate.ts")], {
