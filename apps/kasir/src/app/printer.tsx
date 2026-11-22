@@ -7,7 +7,7 @@ import { NotaPaper } from "@/components/nota-paper";
 import { AppHeader, Body } from "@/components/screen";
 import { Banner, Button, c, Card, Checkbox, EmptyState, sp, Txt } from "@/components/ui";
 import {
-  driver, loadPrinterSettings, printNota, PrinterError, SAMPLE_NOTA, savePrinterSettings, type PrinterDevice, type PrinterSettings,
+  driver, loadPrinterSettings, printMode, printNota, PrinterError, SAMPLE_NOTA, savePrinterSettings, type PrinterDevice, type PrinterSettings,
 } from "@/printer";
 import { theme } from "@/theme.gen";
 
@@ -49,7 +49,7 @@ export default function PrinterScreen() {
     setTesting(true); setMsg(null);
     try {
       await printNota({ ...SAMPLE_NOTA, receivedAt: new Date().toISOString() }, settings);
-      setMsg({ tone: "success", text: "Terkirim ke printer. Periksa: garis lurus sampai tepi, angka rata kanan, QR bisa di-scan." });
+      setMsg({ tone: "success", text: printMode === "browser" ? "Dialog cetak dibuka. Setelah tercetak, periksa: garis lurus sampai tepi, angka rata kanan, QR bisa di-scan." : "Terkirim ke printer. Periksa: garis lurus sampai tepi, angka rata kanan, QR bisa di-scan." });
     } catch (e) {
       setMsg({ tone: "danger", text: e instanceof PrinterError ? e.message : "Gagal mencetak." });
     } finally { setTesting(false); }
@@ -60,8 +60,10 @@ export default function PrinterScreen() {
   return (
     <View style={{ flex: 1 }}>
       <AppHeader title="Printer" back />
-      <Body>
-        {!driver.available && <Banner tone="info" icon={PrinterIcon} text="Printer Bluetooth hanya bisa dipakai di aplikasi Android. Pengaturan kertas tetap bisa dicoba di sini." />}
+      <Body width="content">
+        {printMode === "browser" && (
+          <Banner tone="info" icon={PrinterIcon} text="Di browser, nota dicetak lewat dialog cetak. Pasang driver printer thermal di komputer (atau layanan cetak printer di HP), lalu pilih printer itu di dialog." />
+        )}
         {msg && <Banner tone={msg.tone} text={msg.text} />}
 
         <Card style={{ gap: sp(3) }}>
@@ -109,6 +111,7 @@ export default function PrinterScreen() {
           </Card>
         )}
 
+        {printMode === "browser" && <Button label="Uji cetak" icon={PrinterIcon} onPress={test} loading={testing} />}
         <Txt variant="sm" color="text-muted">Contoh hasil cetak di kertas {settings.paper.replace("mm", " mm")}:</Txt>
         <NotaPaper nota={SAMPLE_NOTA} columns={NOTA_COLUMNS[settings.paper]} />
       </Body>

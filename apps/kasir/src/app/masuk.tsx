@@ -7,6 +7,7 @@ import { Banner, Button, c, Field, sp, Txt } from "@/components/ui";
 import { RequestError } from "@/lib/api";
 import { useSession } from "@/lib/session";
 import { getItem, setItem } from "@/lib/storage";
+import { theme } from "@/theme.gen";
 
 export default function Masuk() {
   const { signIn } = useSession();
@@ -42,7 +43,7 @@ export default function Masuk() {
 
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.surface }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: sp(4), paddingTop: insets.top + sp(6), gap: sp(5) }} keyboardShouldPersistTaps="handled">
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: sp(4), paddingTop: insets.top + sp(6), gap: sp(5), width: "100%", maxWidth: theme.layout.kasir.form_max, alignSelf: "center" }} keyboardShouldPersistTaps="handled">
         <View style={{ gap: sp(1) }}>
           <Txt variant="xl" accessibilityRole="header">Masuk kasir</Txt>
           <Txt color="text-muted">Pakai kode usaha dan akun yang dibuat pemilik.</Txt>

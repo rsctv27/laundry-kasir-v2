@@ -7,6 +7,7 @@ import { OrderRow } from "@/components/order-row";
 import { AppHeader } from "@/components/screen";
 import { Banner, c, EmptyState, Field, Skeleton, sp, Txt } from "@/components/ui";
 import { api } from "@/lib/api";
+import { useLayout } from "@/lib/layout";
 import { useLoad } from "@/lib/use-load";
 import { useSession } from "@/lib/session";
 import { theme } from "@/theme.gen";
@@ -23,6 +24,8 @@ type ListRes = { orders: OrderSummaryDto[]; nextCursor: string | null; counts: P
 
 export default function Cucian() {
   const { me } = useSession();
+  const m = useLayout().max("list");
+  const limit = m ? { maxWidth: m, width: "100%" as const, alignSelf: "center" as const } : null;
   const tz = me?.outlet?.timezone ?? "Asia/Jakarta";
   const [tab, setTab] = useState<Tab>("semua");
   const [q, setQ] = useState("");
@@ -51,7 +54,7 @@ export default function Cucian() {
   return (
     <View style={{ flex: 1 }}>
       <AppHeader title="Cucian" />
-      <View style={st.searchWrap}>
+      <View style={st.searchWrap}><View style={limit}>
         <Field
           label="Cari nota atau nama pelanggan"
           value={q}
@@ -62,9 +65,9 @@ export default function Cucian() {
           autoCapitalize="none"
           placeholder="Contoh: MLG1-261121 atau Sari"
         />
-      </View>
+      </View></View>
       <View style={st.tabsBar}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityRole="tablist" contentContainerStyle={{ paddingHorizontal: sp(2) }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} accessibilityRole="tablist" contentContainerStyle={[{ paddingHorizontal: sp(2) }, limit]}>
           {TABS.map((t) => {
             const on = t.key === tab;
             return (
@@ -90,6 +93,7 @@ export default function Cucian() {
           onEndReached={loadMore}
           onEndReachedThreshold={0.4}
           style={{ backgroundColor: c.surface }}
+          contentContainerStyle={limit}
           ListEmptyComponent={
             query ? (
               <EmptyState icon={Search} title={`Tidak ada hasil untuk "${query}"`} text="Coba nomor nota lain atau sebagian nama pelanggan." />

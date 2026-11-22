@@ -5,6 +5,7 @@ import { Printer } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, View } from "react-native";
 import { CashInput, cashOk, PaymentPicker, type PayChoice } from "@/components/payment";
+import { QrisImage } from "@/components/qris-image";
 import { ActionBar, AppHeader, Body } from "@/components/screen";
 import { Banner, Button, Card, Checkbox, sp, Txt } from "@/components/ui";
 import { api, RequestError } from "@/lib/api";
@@ -87,6 +88,7 @@ export default function Bayar() {
         {error && <Banner tone="danger" text={error} />}
         <PaymentPicker value={method} onChange={(m) => { setMethod(m); setConfirmed(false); }} />
         {method === "tunai" && <CashInput total={total} value={cash} onChange={setCash} />}
+        {method === "qris" && <QrisImage amountLabel={formatRupiah(total)} />}
         {method === "nanti" && <Banner tone="info" text="Tagihan dibayar saat pelanggan mengambil cucian." />}
         {needsConfirm && (
           <Checkbox

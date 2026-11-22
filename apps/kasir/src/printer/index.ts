@@ -1,5 +1,6 @@
 import { buildNota, NOTA_COLUMNS, renderEscPos, type NotaData, type PaperWidth } from "@lk/shared";
 import { getItem, setItem } from "@/lib/storage";
+import { printInBrowser } from "./browser";
 import { driver } from "./driver";
 import { PrinterError } from "./types";
 
@@ -17,9 +18,14 @@ export async function savePrinterSettings(s: PrinterSettings) {
   await setItem(KEY, JSON.stringify(s));
 }
 
+/** Cara cetak di perangkat ini: Bluetooth (aplikasi Android) atau dialog cetak browser (versi web). */
+export const printMode: "bluetooth" | "browser" = driver.available ? "bluetooth" : "browser";
+
 /** Cetak nota pelanggan, lalu label produksi (tanpa harga) kalau diaktifkan. */
 export async function printNota(nota: NotaData, s: PrinterSettings) {
-  if (!driver.available) throw new PrinterError("unavailable", "Cetak nota hanya tersedia di aplikasi Android.");
+  if (printMode === "browser") {
+    return printInBrowser([{ nota, kind: "pelanggan" }, ...(s.productionCopy ? [{ nota, kind: "produksi" as const }] : [])], s.paper);
+  }
   if (!s.address) throw new PrinterError("connect", "Pilih printer dulu di menu Lainnya > Printer.");
   const cols = NOTA_COLUMNS[s.paper];
   await driver.printRaw(s.address, renderEscPos(buildNota(nota, "pelanggan"), cols));

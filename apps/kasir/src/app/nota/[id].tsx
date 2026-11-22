@@ -9,7 +9,7 @@ import { ActionBar, AppHeader, Body } from "@/components/screen";
 import { Banner, Button, c, Skeleton, sp, Txt } from "@/components/ui";
 import { api } from "@/lib/api";
 import { useLoad } from "@/lib/use-load";
-import { driver, loadPrinterSettings, printNota, PrinterError, type PrinterSettings } from "@/printer";
+import { loadPrinterSettings, printMode, printNota, PrinterError, type PrinterSettings } from "@/printer";
 import { theme } from "@/theme.gen";
 
 export default function Nota() {
@@ -26,13 +26,16 @@ export default function Nota() {
 
   const doPrint = useCallback(async () => {
     if (!data || !settings) return;
-    if (!driver.available) return setMsg({ tone: "info", text: "Cetak nota hanya tersedia di aplikasi Android. Kirim lewat WhatsApp untuk sementara." });
-    if (!settings.address) return router.push("/printer");
+    if (printMode === "bluetooth" && !settings.address) return router.push("/printer");
     setPrinting(true);
     setMsg(null);
     try {
       await printNota(data.nota, settings);
-      setMsg({ tone: "success", text: settings.productionCopy ? "Nota dan label produksi tercetak." : "Nota tercetak." });
+      setMsg(
+        printMode === "browser"
+          ? { tone: "info", text: "Dialog cetak dibuka. Pilih printer thermal dan ukuran kertas " + settings.paper.replace("mm", " mm") + "." }
+          : { tone: "success", text: settings.productionCopy ? "Nota dan label produksi tercetak." : "Nota tercetak." },
+      );
     } catch (e) {
       setMsg({ tone: "danger", text: e instanceof PrinterError ? e.message : "Gagal mencetak.", retry: true });
     } finally {

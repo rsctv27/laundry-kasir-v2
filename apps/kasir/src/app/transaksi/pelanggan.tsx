@@ -86,15 +86,29 @@ function NewCustomer({ initial, onCancel, onCreated }: { initial: string; onCanc
   const [name, setName] = useState(looksLikePhone ? "" : initial.trim());
   const [wa, setWa] = useState(looksLikePhone ? initial.trim() : "");
   const [address, setAddress] = useState("");
+  const [birth, setBirth] = useState(""); // DD/MM/YYYY
   const [fields, setFields] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const waRef = useRef<TextInputInstance>(null);
 
+  const birthIso = (() => {
+    const m = birth.trim().match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{4})$/);
+    if (!m) return null;
+    const [d, mo, y] = [Number(m[1]), Number(m[2]), Number(m[3])];
+    const dt = new Date(Date.UTC(y, mo - 1, d));
+    if (dt.getUTCDate() !== d || dt.getUTCMonth() !== mo - 1 || y < 1900 || dt.getTime() > Date.now()) return null;
+    return `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  })();
+  const birthError = birth.trim() && !birthIso ? "Tulis seperti 17/04/1985" : undefined;
+
   async function save() {
     setSaving(true); setError(null); setFields({});
     try {
-      const cu = await api<CustomerDto>("customers", { method: "POST", json: { name, phoneWa: wa || undefined, address: address || undefined } });
+      const cu = await api<CustomerDto>("customers", {
+        method: "POST",
+        json: { name, phoneWa: wa || undefined, address: address || undefined, birthDate: birthIso ?? undefined },
+      });
       onCreated(cu);
     } catch (e) {
       if (e instanceof RequestError) { setError(e.message); setFields(e.fields); } else setError("Gagal menyimpan pelanggan.");
@@ -108,9 +122,10 @@ function NewCustomer({ initial, onCancel, onCreated }: { initial: string; onCanc
       <Field label="Nama" value={name} onChangeText={setName} autoFocus={!looksLikePhone} autoCapitalize="words" error={fields.name} returnKeyType="next" onSubmitEditing={() => waRef.current?.focus()} />
       <Field ref={waRef} label="Nomor WhatsApp" value={wa} onChangeText={setWa} keyboardType="phone-pad" autoFocus={looksLikePhone} error={fields.phoneWa} help="Untuk kirim nota dan kabar cucian. Boleh dikosongkan." />
       <Field label="Alamat (opsional)" value={address} onChangeText={setAddress} />
+      <Field label="Tanggal lahir (opsional)" value={birth} onChangeText={setBirth} placeholder="DD/MM/YYYY" keyboardType="numbers-and-punctuation" error={birthError ?? fields.birthDate} />
       <View style={{ flexDirection: "row", gap: sp(2) }}>
         <Button label="Batal" variant="secondary" onPress={onCancel} style={{ flex: 1 }} />
-        <Button label="Simpan & lanjut" onPress={save} loading={saving} disabled={name.trim().length < 1} style={{ flex: 2 }} />
+        <Button label="Simpan & lanjut" onPress={save} loading={saving} disabled={name.trim().length < 1 || !!birthError} style={{ flex: 2 }} />
       </View>
     </Card>
   );

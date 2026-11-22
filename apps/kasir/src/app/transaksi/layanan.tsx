@@ -7,6 +7,7 @@ import { AppHeader, ActionBar, Body } from "@/components/screen";
 import { Banner, Button, c, Card, EmptyState, IconButton, noOutline, Skeleton, sp, Txt } from "@/components/ui";
 import { api } from "@/lib/api";
 import { safeLineTotal, useDraft, type DraftLine } from "@/lib/draft";
+import { useContentWidth } from "@/lib/layout";
 import { useLoad } from "@/lib/use-load";
 import { theme } from "@/theme.gen";
 
@@ -15,6 +16,10 @@ const duration = (h: number) => (h % 24 === 0 ? `${h / 24} hari` : `${h} jam`);
 export default function Layanan() {
   const draft = useDraft();
   const { data, error, loading, reload } = useLoad(() => api<{ services: ServiceDto[] }>("services"));
+  // 2 kolom di HP, 3 di tablet, 4 di layar lebar.
+  const inner = useContentWidth("list") - theme.space[4] * 2;
+  const cols = inner >= 720 ? 4 : inner >= 480 ? 3 : 2;
+  const cardW = Math.floor((inner - theme.space[2] * (cols - 1)) / cols);
   if (!draft.customer) return <Redirect href="/transaksi/pelanggan" />;
 
   const selected = (id: string) => draft.lines.some((l) => l.service.id === id);
@@ -23,7 +28,7 @@ export default function Layanan() {
   return (
     <View style={{ flex: 1 }}>
       <AppHeader title="Layanan" subtitle="Langkah 2 dari 3" back />
-      <Body>
+      <Body width="list">
         <Card style={st.cust}>
           <View style={{ flex: 1, minWidth: 0 }}>
             <Txt weight={600} numberOfLines={1}>{draft.customer.name}</Txt>
@@ -33,7 +38,7 @@ export default function Layanan() {
         </Card>
         {error && <Banner tone="danger" text={error} action={{ label: "Coba lagi", onPress: reload }} />}
         {!data && loading ? (
-          <View style={st.grid}>{[0, 1, 2, 3].map((i) => <View key={i} style={[st.svc, { gap: sp(2) }]}><Skeleton width="70%" /><Skeleton width="50%" /></View>)}</View>
+          <View style={st.grid}>{[0, 1, 2, 3].map((i) => <View key={i} style={[st.svc, { gap: sp(2), width: cardW }]}><Skeleton width="70%" /><Skeleton width="50%" /></View>)}</View>
         ) : data && data.services.length === 0 ? (
           <Card><EmptyState icon={Shirt} title="Belum ada layanan" text="Minta pemilik menambahkan layanan dan harga di web pemilik." /></Card>
         ) : (
@@ -47,7 +52,7 @@ export default function Layanan() {
                   accessibilityState={{ checked: on }}
                   accessibilityLabel={`${s.name}, ${formatRupiah(s.price)} per ${s.pricingUnit}, ${duration(s.durationHours)}`}
                   onPress={() => draft.toggleService(s)}
-                  style={[st.svc, on && st.svcOn]}
+                  style={[st.svc, { width: cardW }, on && st.svcOn]}
                 >
                   {on && <View style={st.tick}><Check size={14} color={c["on-accent"]} /></View>}
                   <Txt weight={600} style={{ paddingRight: sp(6) }} numberOfLines={2}>{s.name}</Txt>
@@ -66,7 +71,7 @@ export default function Layanan() {
           </Card>
         )}
       </Body>
-      <ActionBar>
+      <ActionBar width="list">
         <View style={{ flex: 1 }}>
           <Txt variant="xs" color="text-muted">{draft.lines.length} layanan</Txt>
           <Txt variant="lg" tabular>{formatRupiah(draft.total)}</Txt>
@@ -114,7 +119,7 @@ function QtyRow({ line, last, onChange }: { line: DraftLine; last: boolean; onCh
 const st = StyleSheet.create({
   cust: { flexDirection: "row", alignItems: "center", gap: sp(3), paddingVertical: sp(2) },
   grid: { flexDirection: "row", flexWrap: "wrap", gap: sp(2) },
-  svc: { width: "48.8%", minHeight: 88, backgroundColor: c["surface-raised"], borderWidth: 1, borderColor: c.border, borderRadius: theme.radius.lg, padding: sp(3), gap: 2 },
+  svc: { minHeight: 88, backgroundColor: c["surface-raised"], borderWidth: 1, borderColor: c.border, borderRadius: theme.radius.lg, padding: sp(3), gap: 2 },
   svcOn: { borderWidth: 2, borderColor: c.accent, padding: sp(3) - 1, backgroundColor: c["accent-soft"] },
   tick: { position: "absolute", top: 10, right: 10, width: 22, height: 22, borderRadius: 11, backgroundColor: c.accent, alignItems: "center", justifyContent: "center" },
   qtyRow: { flexDirection: "row", alignItems: "center", gap: sp(3), paddingVertical: sp(3) },

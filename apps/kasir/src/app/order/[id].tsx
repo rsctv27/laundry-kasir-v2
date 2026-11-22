@@ -3,11 +3,11 @@ import {
   formatDateTime, formatQty, formatRupiah, formatWa, nextStatus, STATUS_LABEL, waLink, type OrderDetailDto,
 } from "@lk/shared";
 import { router, useLocalSearchParams } from "expo-router";
-import { MessageCircle, Package, Play, Receipt, CheckCheck } from "lucide-react-native";
+import { Ban, MessageCircle, Package, Play, Receipt, CheckCheck } from "lucide-react-native";
 import { useState } from "react";
 import { Linking, StyleSheet, View } from "react-native";
 import { ActionBar, AppHeader, Body } from "@/components/screen";
-import { Badge, Banner, Button, c, Card, Skeleton, sp, Txt } from "@/components/ui";
+import { Badge, Banner, Button, c, Card, Field, Skeleton, sp, Txt } from "@/components/ui";
 import { api, RequestError } from "@/lib/api";
 import { useLoad } from "@/lib/use-load";
 import { useSession } from "@/lib/session";
@@ -22,6 +22,19 @@ export default function OrderDetail() {
   const { data: o, error, reload, setData } = useLoad(() => api<OrderDetailDto>(`orders/${id}`), [id]);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [reason, setReason] = useState("");
+  const canCancelHere = !!o && (me?.staff.role === "owner" || me?.staff.role === "supervisor") && (o.status === "baru" || o.status === "diproses") && o.paidTotal === 0;
+
+  async function cancel() {
+    if (!o) return;
+    setBusy(true); setActionError(null);
+    try {
+      setData(await api<OrderDetailDto>(`orders/${o.id}/cancel`, { method: "POST", json: { reason } }));
+      setCancelOpen(false);
+    } catch (e) { setActionError(e instanceof RequestError ? e.message : "Gagal membatalkan nota."); }
+    finally { setBusy(false); }
+  }
 
   async function advance() {
     if (!o) return;
@@ -101,6 +114,20 @@ export default function OrderDetail() {
             {o.status === "selesai" && o.customerPhoneWa && (
               <Button label="Kabari pelanggan lewat WA" icon={MessageCircle} variant="secondary" onPress={notifyReady} />
             )}
+            {o.status === "batal" && <Banner tone="danger" text={`Nota dibatalkan${o.events.at(-1)?.note ? `: ${o.events.at(-1)?.note}` : "."}`} />}
+            {canCancelHere && (cancelOpen ? (
+              <Card style={{ gap: sp(3) }}>
+                <Txt variant="lg">Batalkan nota ini?</Txt>
+                <Txt variant="sm" color="text-muted">Nota ditandai batal dan tidak masuk hitungan omzet. Riwayatnya tetap tersimpan.</Txt>
+                <Field label="Alasan (wajib)" value={reason} onChangeText={setReason} placeholder="Contoh: salah input berat" />
+                <View style={{ flexDirection: "row", gap: sp(2) }}>
+                  <Button label="Kembali" variant="secondary" onPress={() => setCancelOpen(false)} style={{ flex: 1 }} />
+                  <Button label="Batalkan nota" variant="danger" loading={busy} disabled={reason.trim().length < 3} onPress={cancel} style={{ flex: 1 }} />
+                </View>
+              </Card>
+            ) : (
+              <Button label="Batalkan nota" icon={Ban} variant="ghost" onPress={() => setCancelOpen(true)} />
+            ))}
           </>
         )}
       </Body>

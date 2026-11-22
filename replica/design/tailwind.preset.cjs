@@ -23,7 +23,9 @@ module.exports = {
         "warning": "#8f5300",
         "warning-soft": "#fdf1dc",
         "info": "#2456c9",
-        "info-soft": "#e8eefc"
+        "info-soft": "#e8eefc",
+        "series-1": "#2a78d6",
+        "series-2": "#eb6834"
       },
       "fontFamily": {
         "sans": [

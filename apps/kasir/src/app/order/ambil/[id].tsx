@@ -5,6 +5,7 @@ import { Package } from "lucide-react-native";
 import { useRef, useState } from "react";
 import { View } from "react-native";
 import { CashInput, cashOk, PaymentPicker, type PayChoice } from "@/components/payment";
+import { QrisImage } from "@/components/qris-image";
 import { ActionBar, AppHeader, Body } from "@/components/screen";
 import { Banner, Button, Card, Checkbox, Skeleton, sp, Txt } from "@/components/ui";
 import { api, RequestError } from "@/lib/api";
@@ -68,6 +69,7 @@ export default function Ambil() {
               <>
                 <PaymentPicker value={method} onChange={(m) => { setMethod(m as typeof method); setConfirmed(false); }} allowLater={false} />
                 {method === "tunai" && <CashInput total={remaining} value={cash} onChange={setCash} />}
+                {method === "qris" && <QrisImage amountLabel={formatRupiah(remaining)} />}
                 {needsConfirm && (
                   <Checkbox checked={confirmed} onChange={setConfirmed} label={method === "qris" ? `Dana ${formatRupiah(remaining)} sudah masuk lewat QRIS` : `Pembayaran ${formatRupiah(remaining)} di mesin EDC berhasil`} />
                 )}

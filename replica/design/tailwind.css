@@ -24,6 +24,8 @@
   --color-warning-soft: var(--lk-warning-soft);
   --color-info: var(--lk-info);
   --color-info-soft: var(--lk-info-soft);
+  --color-series-1: var(--lk-series-1);
+  --color-series-2: var(--lk-series-2);
   --font-sans: var(--lk-font-sans);
   --font-mono: var(--lk-font-mono);
   --text-xs: var(--lk-text-xs);

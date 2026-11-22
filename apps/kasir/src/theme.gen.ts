@@ -21,7 +21,9 @@ export const theme = {
     "warning": "#8f5300",
     "warning-soft": "#fdf1dc",
     "info": "#2456c9",
-    "info-soft": "#e8eefc"
+    "info-soft": "#e8eefc",
+    "series-1": "#2a78d6",
+    "series-2": "#eb6834"
   },
   "status": {
     "baru": {
@@ -120,7 +122,11 @@ export const theme = {
       "header": 56,
       "bottom_nav": 64,
       "action_bar": 80,
-      "gutter": 16
+      "gutter": 16,
+      "content_max": 760,
+      "list_max": 1040,
+      "sidebar": 232,
+      "form_max": 440
     },
     "owner": {
       "sidebar": 240,
@@ -133,7 +139,8 @@ export const theme = {
       "md": 768,
       "lg": 1024,
       "xl": 1280
-    }
+    },
+    "_about": "kasir.content_max/list_max/form_max: lebar maksimum konten di layar lebar (browser desktop/tablet). sidebar: lebar menu samping di layar >= breakpoints.lg."
   },
   "nota": {
     "58mm": 32,

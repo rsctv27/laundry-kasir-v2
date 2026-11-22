@@ -21,7 +21,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "output": "single"
+      "output": "single",
+      "lang": "id",
+      "themeColor": "#ffffff",
+      "description": "Catat cucian masuk, pembayaran, dan nota laundry."
     },
     "plugins": [
       "expo-router",

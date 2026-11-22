@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import { ChevronLeft, type LucideIcon } from "lucide-react-native";
 import { ScrollView, StyleSheet, View, type ScrollViewProps } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLayout, type Width } from "@/lib/layout";
 import { theme } from "@/theme.gen";
 import { c, IconButton, sp, Txt } from "./ui";
 
@@ -26,23 +27,33 @@ export function AppHeader({
   );
 }
 
-export function Body({ children, scroll = true, ...rest }: ScrollViewProps & { scroll?: boolean }) {
-  if (!scroll) return <View style={st.body}>{children}</View>;
+/** Area isi. Di layar lebar, konten dibatasi lebarnya dan diletakkan di tengah. */
+export function Body({ children, scroll = true, width = "content", ...rest }: ScrollViewProps & { scroll?: boolean; width?: Width }) {
+  const { max } = useLayout();
+  const m = max(width);
+  const limit = m ? { maxWidth: m, width: "100%" as const, alignSelf: "center" as const } : null;
+  if (!scroll) return <View style={[st.body, limit]}>{children}</View>;
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: c.surface }} contentContainerStyle={st.bodyContent} keyboardShouldPersistTaps="handled" {...rest}>
+    <ScrollView style={{ flex: 1, backgroundColor: c.surface }} contentContainerStyle={[st.bodyContent, limit]} keyboardShouldPersistTaps="handled" {...rest}>
       {children}
     </ScrollView>
   );
 }
 
-export function ActionBar({ children }: { children: React.ReactNode }) {
+export function ActionBar({ children, width = "content" }: { children: React.ReactNode; width?: Width }) {
   const insets = useSafeAreaInsets();
-  return <View style={[st.action, { paddingBottom: insets.bottom, height: theme.layout.kasir.action_bar + insets.bottom }]}>{children}</View>;
+  const m = useLayout().max(width);
+  return (
+    <View style={[st.actionWrap, { paddingBottom: insets.bottom, height: theme.layout.kasir.action_bar + insets.bottom }]}>
+      <View style={[st.action, m ? { maxWidth: m, width: "100%", alignSelf: "center" } : null]}>{children}</View>
+    </View>
+  );
 }
 
 const st = StyleSheet.create({
   header: { flexDirection: "row", alignItems: "center", gap: sp(1), paddingRight: sp(2), paddingLeft: sp(1), backgroundColor: c["surface-raised"], borderBottomWidth: 1, borderBottomColor: c.border },
   body: { flex: 1, backgroundColor: c.surface, padding: sp(4), gap: sp(4) },
   bodyContent: { padding: sp(4), gap: sp(4), paddingBottom: sp(8) },
-  action: { flexDirection: "row", alignItems: "center", gap: sp(3), paddingHorizontal: sp(4), backgroundColor: c["surface-raised"], borderTopWidth: 1, borderTopColor: c.border },
+  actionWrap: { backgroundColor: c["surface-raised"], borderTopWidth: 1, borderTopColor: c.border, justifyContent: "center" },
+  action: { flex: 1, flexDirection: "row", alignItems: "center", gap: sp(3), paddingHorizontal: sp(4) },
 });
