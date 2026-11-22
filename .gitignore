@@ -11,3 +11,5 @@ coverage/
 !.env.example
 test-results/
 playwright-report/
+apps/web/public/kasir/
+.vercel/

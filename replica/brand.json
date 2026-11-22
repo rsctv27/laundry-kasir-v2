@@ -1,0 +1,6 @@
+{
+  "_about": "Identitas aplikasi asli yang tidak boleh ikut terbawa. Warna: tidak ada yang diambil (UI asli tidak pernah dilihat; accent masih tinta netral).",
+  "avoid": ["Smartlink", "Smartlink Bos", "Smartlink Kasir"],
+  "domains": ["smartlink.id"],
+  "colors": []
+}

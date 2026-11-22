@@ -6,8 +6,8 @@ Butuh: API di :3000 (data contoh dari `pnpm --filter @lk/web seed`), build web k
 import os, re, subprocess, sys, time
 from playwright.sync_api import sync_playwright, expect
 
-KASIR = "http://localhost:8081"
-WEB = "http://localhost:3000"
+KASIR = os.environ.get("KASIR_URL", "http://localhost:8081").rstrip("/")
+WEB = os.environ.get("WEB_URL", "http://localhost:3000").rstrip("/")
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "..", "replica", "clone-screens")
 os.makedirs(OUT, exist_ok=True)
 DB = ["psql", "-h", "127.0.0.1", "-p", "5433", "-U", "postgres", "-d", "lk_dev", "-Atc"]

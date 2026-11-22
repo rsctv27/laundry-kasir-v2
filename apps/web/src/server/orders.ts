@@ -7,13 +7,14 @@ import {
 import type postgres from "postgres";
 import type { Ctx } from "./context";
 import { requireOutlet } from "./context";
+import { siteUrl } from "./env";
 import { ApiError, badRequest, conflict, isUniqueViolation, notFound } from "./http";
 
 type Tx = postgres.TransactionSql;
 const METHOD_LABEL: Record<string, string> = { tunai: "tunai", qris: "QRIS", debit: "debit", ewallet: "e-wallet", deposit: "deposit" };
 
 export function trackingUrl(token: string) {
-  return `${(process.env.PUBLIC_BASE_URL ?? "http://localhost:3000").replace(/\/$/, "")}/t/${token}`;
+  return `${siteUrl()}/t/${token}`;
 }
 
 type SummaryRow = {

@@ -15,9 +15,15 @@ export default function Home() {
           Daftarkan usaha laundry
         </Link>
         <Link href="/masuk" className="inline-flex h-12 items-center justify-center rounded-md border border-border bg-surface-raised font-semibold">
-          Saya sudah punya akun
+          Masuk sebagai pemilik
         </Link>
+        <a href="/kasir" className="inline-flex h-12 items-center justify-center rounded-md border border-border bg-surface-raised font-semibold">
+          Buka aplikasi kasir
+        </a>
       </div>
+      <p className="text-sm text-muted">
+        <Link href="/privasi" className="underline">Privasi</Link> · <Link href="/ketentuan" className="underline">Ketentuan</Link>
+      </p>
     </main>
   );
 }

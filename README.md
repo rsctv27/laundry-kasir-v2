@@ -1,7 +1,7 @@
 # laundry-kasir (nama sementara)
 
 Aplikasi kasir laundry: aplikasi Android untuk kasir, web untuk pemilik, satu API dan satu database.
-Fitur dan alurnya dibangun ulang dari pengamatan publik atas Smartlink (lihat `replica/`). Kode, teks, dan desainnya ditulis sendiri.
+Catatan riset, rencana, dan log pembangunan ada di `replica/`. Kode, teks, dan desainnya ditulis sendiri.
 
 ```
 apps/web/         Next.js 16: web pemilik, halaman lacak /t/:token, API /api/v1, login /api/auth

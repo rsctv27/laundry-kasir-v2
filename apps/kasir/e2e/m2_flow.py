@@ -4,11 +4,12 @@ Kasir (HP 390 px dan desktop 1440 px), web pemilik (desktop dan HP), PWA, cetak 
 Butuh: API :3000 dengan data contoh (seed.ts + seed-history.ts), build web kasir :8081.
     python3 apps/kasir/e2e/m2_flow.py
 """
-import json, os, re, subprocess, sys, time, urllib.request
+import json, os, re, subprocess, sys, time, urllib.parse, urllib.request
 from PIL import Image, ImageDraw
 from playwright.sync_api import sync_playwright, expect
 
-KASIR, WEB = "http://localhost:8081", "http://localhost:3000"
+KASIR = os.environ.get("KASIR_URL", "http://localhost:8081").rstrip("/")
+WEB = os.environ.get("WEB_URL", "http://localhost:3000").rstrip("/")
 OUT = os.path.join(os.path.dirname(__file__), "..", "..", "..", "replica", "clone-screens")
 DB = ["psql", "-h", "127.0.0.1", "-p", "5433", "-U", "postgres", "-d", "lk_dev", "-Atc"]
 errors, results = [], []
@@ -52,7 +53,7 @@ check("PWA: manifest dengan nama, ikon 192 & 512, display standalone",
       m["short_name"] == "Kasir" and m["display"] == "standalone" and {i["sizes"] for i in m["icons"]} >= {"192x192", "512x512"})
 check("PWA: index.html memuat manifest dan lang=id", 'rel="manifest"' in html and 'lang="id"' in html)
 for icon in m["icons"]:
-    check(f"PWA: ikon {icon['src']} bisa diunduh", urllib.request.urlopen(KASIR + icon["src"]).status == 200)
+    check(f"PWA: ikon {icon['src']} bisa diunduh", urllib.request.urlopen(urllib.parse.urljoin(KASIR + "/", icon["src"])).status == 200)
 
 with sync_playwright() as p:
     b = p.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox"])

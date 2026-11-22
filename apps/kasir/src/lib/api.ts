@@ -1,7 +1,9 @@
 import type { ApiError, MeDto } from "@lk/shared";
 import { getItem, removeItem, setItem } from "./storage";
 
-export const API_URL = (process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:3000").replace(/\/$/, "");
+// "same-origin": versi web yang disajikan dari server yang sama (mis. https://domain/kasir) memanggil /api secara relatif.
+const RAW_API_URL = process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:3000";
+export const API_URL = RAW_API_URL === "same-origin" ? "" : RAW_API_URL.replace(/\/$/, "");
 const TOKEN_KEY = "lk.session";
 
 export class RequestError extends Error {
