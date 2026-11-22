@@ -1,17 +1,22 @@
 // Satu pintu untuk /api/v1/*: CORS, login, validasi, dan format error di satu tempat.
 import {
-  addPaymentInput, createBusinessInput, createCustomerInput, createOrderInput, createServiceInput, createStaffInput,
-  statusChangeInput, type MeDto,
+  addPaymentInput, cancelOrderInput, createBusinessInput, createCustomerInput, createExpenseInput, createOrderInput,
+  createServiceInput, createStaffInput, periodQuery, statusChangeInput, updateOutletInput, updateServiceInput, uploadQrisInput,
+  type MeDto,
 } from "@lk/shared";
 import { z } from "zod";
 import { requireCtx, requireRole, requireUser } from "./context";
 import { createCustomer, getCustomer, searchCustomers } from "./customers";
 import { ApiError, errorResponse, json } from "./http";
-import { addPayment, changeStatus, createOrder, getOrder, home, listOrders, logMessage, notaFor, pickup } from "./orders";
-import { createBusiness, createService, createStaff, listServices, listStaff } from "./setup";
+import { createExpense, dailyStats, deleteExpense, listExpenses, reportSummary } from "./finance";
+import { addPayment, cancelOrder, changeStatus, createOrder, getOrder, home, listOrders, logMessage, notaFor, pickup } from "./orders";
+import {
+  createBusiness, createService, createStaff, deleteQris, getQris, listOutlets, listServices, listStaff, setQris, updateOutlet, updateService,
+} from "./setup";
 
 type Handler = (req: Request, params: string[], url: URL) => Promise<unknown | Response>;
 const uuid = z.string().uuid();
+const day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional();
 const body = async (req: Request) => (req.headers.get("content-length") === "0" ? {} : await req.json());
 
 const routes: Array<[string, RegExp, Handler]> = [
@@ -34,6 +39,39 @@ const routes: Array<[string, RegExp, Handler]> = [
     const ctx = await requireCtx(req);
     requireRole(ctx, ["owner", "supervisor"]); // hak akses dicek sebelum isian divalidasi
     return created(await createService(ctx, createServiceInput.parse(await body(req))));
+  }],
+  ["PATCH", /^services\/([^/]+)$/, async (req, [id]) => {
+    const ctx = await requireCtx(req);
+    requireRole(ctx, ["owner", "supervisor"]);
+    return updateService(ctx, uuid.parse(id), updateServiceInput.parse(await body(req)));
+  }],
+  ["GET", /^outlets$/, async (req) => ({ outlets: await listOutlets(await requireCtx(req)) })],
+  ["PATCH", /^outlets\/([^/]+)$/, async (req, [id]) => {
+    const ctx = await requireCtx(req);
+    requireRole(ctx, ["owner"]);
+    return updateOutlet(ctx, uuid.parse(id), updateOutletInput.parse(await body(req)));
+  }],
+  ["GET", /^outlets\/([^/]+)\/qris$/, async (req, [id]) => getQris(await requireCtx(req), uuid.parse(id))],
+  ["PUT", /^outlets\/([^/]+)\/qris$/, async (req, [id]) => {
+    const ctx = await requireCtx(req);
+    requireRole(ctx, ["owner"]);
+    const input = uploadQrisInput.parse(await body(req));
+    return setQris(ctx, uuid.parse(id), input.mime, input.dataBase64);
+  }],
+  ["DELETE", /^outlets\/([^/]+)\/qris$/, async (req, [id]) => deleteQris(await requireCtx(req), uuid.parse(id))],
+  ["GET", /^expenses$/, async (req, _p, url) => listExpenses(await requireCtx(req), day.parse(url.searchParams.get("date") ?? undefined))],
+  ["POST", /^expenses$/, async (req) => created(await createExpense(await requireCtx(req), createExpenseInput.parse(await body(req))))],
+  ["DELETE", /^expenses\/([^/]+)$/, async (req, [id]) => deleteExpense(await requireCtx(req), uuid.parse(id))],
+  ["GET", /^stats\/daily$/, async (req, _p, url) => dailyStats(await requireCtx(req), day.parse(url.searchParams.get("date") ?? undefined))],
+  ["GET", /^reports\/summary$/, async (req, _p, url) => {
+    const ctx = await requireCtx(req);
+    requireRole(ctx, ["owner", "supervisor"]);
+    const q = periodQuery.parse(Object.fromEntries(url.searchParams));
+    return reportSummary(ctx, q.from, q.to, q.outlet);
+  }],
+  ["POST", /^orders\/([^/]+)\/cancel$/, async (req, [id]) => {
+    const input = cancelOrderInput.parse(await body(req));
+    return cancelOrder(await requireCtx(req), uuid.parse(id), input.reason);
   }],
   ["GET", /^staff$/, async (req) => ({ staff: await listStaff(await requireCtx(req)) })],
   ["POST", /^staff$/, async (req) => {

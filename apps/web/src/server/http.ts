@@ -23,7 +23,7 @@ export function corsHeaders(req: Request): Headers {
     h.set("Vary", "Origin");
     h.set("Access-Control-Allow-Credentials", "true");
     h.set("Access-Control-Allow-Headers", "authorization,content-type,x-outlet-id");
-    h.set("Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS");
+    h.set("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
     h.set("Access-Control-Expose-Headers", "set-auth-token");
     h.set("Access-Control-Max-Age", "600");
   }

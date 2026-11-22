@@ -39,10 +39,13 @@ export const createStaffInput = z.object({
   outletId: z.string().uuid().nullable(),
 });
 
+const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Format tanggal YYYY-MM-DD");
+
 export const createCustomerInput = z.object({
   name: z.string().trim().min(1, "Nama wajib diisi").max(80),
   phoneWa: waOptional,
   address: z.string().trim().max(200).optional(),
+  birthDate: isoDate.optional(),
 });
 
 export const paymentMethod = z.enum(["tunai", "qris", "debit", "deposit", "ewallet"]);
@@ -72,9 +75,55 @@ export const statusChangeInput = z.object({
   note: z.string().trim().max(200).optional(),
 });
 
+export const updateServiceInput = z
+  .object({
+    name: z.string().trim().min(2).max(60),
+    price: rupiah,
+    durationHours: z.number().int().positive().max(24 * 30),
+    active: z.boolean(),
+  })
+  .partial()
+  .refine((v) => Object.keys(v).length > 0, "Tidak ada yang diubah");
+
+export const updateOutletInput = z
+  .object({
+    name: z.string().trim().min(2).max(80),
+    address: z.string().trim().max(200).nullable(),
+    phoneWa: waOptional,
+    notaFooter: z.string().trim().max(120).nullable(),
+  })
+  .partial()
+  .refine((v) => Object.keys(v).length > 0, "Tidak ada yang diubah");
+
+export const uploadQrisInput = z.object({
+  mime: z.enum(["image/png", "image/jpeg", "image/webp"], { message: "Gunakan gambar PNG, JPG, atau WEBP" }),
+  dataBase64: z.string().min(10).max(700_000, "Gambar maksimal 512 KB"),
+});
+
+export const EXPENSE_CATEGORIES = ["bahan", "gas", "listrik_air", "gaji", "sewa", "perawatan", "lainnya"] as const;
+export const EXPENSE_LABEL: Record<(typeof EXPENSE_CATEGORIES)[number], string> = {
+  bahan: "Sabun & bahan", gas: "Gas", listrik_air: "Listrik & air", gaji: "Gaji", sewa: "Sewa", perawatan: "Perawatan mesin", lainnya: "Lainnya",
+};
+
+export const createExpenseInput = z.object({
+  id: z.string().uuid(), // dibuat aplikasi: kunci idempotency
+  category: z.enum(EXPENSE_CATEGORIES),
+  amount: rupiah.positive("Nominal harus lebih dari 0"),
+  note: z.string().trim().max(200).optional(),
+  spentOn: isoDate.optional(), // default: hari ini (zona waktu outlet)
+});
+
+export const cancelOrderInput = z.object({ reason: z.string().trim().min(3, "Tulis alasan pembatalan").max(200) });
+
+export const periodQuery = z.object({ from: isoDate, to: isoDate, outlet: z.string().uuid().or(z.literal("all")).default("all") });
+
 export type CreateBusinessInput = z.infer<typeof createBusinessInput>;
 export type CreateServiceInput = z.infer<typeof createServiceInput>;
 export type CreateStaffInput = z.infer<typeof createStaffInput>;
 export type CreateCustomerInput = z.infer<typeof createCustomerInput>;
 export type CreateOrderInput = z.infer<typeof createOrderInput>;
 export type AddPaymentInput = z.infer<typeof addPaymentInput>;
+export type UpdateServiceInput = z.infer<typeof updateServiceInput>;
+export type UpdateOutletInput = z.infer<typeof updateOutletInput>;
+export type CreateExpenseInput = z.infer<typeof createExpenseInput>;
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];

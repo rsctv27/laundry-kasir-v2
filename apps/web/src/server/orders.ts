@@ -1,7 +1,7 @@
 import { getSql } from "@lk/db";
 import {
   type AddPaymentInput, type CreateOrderInput, type HomeDto, type NotaDto, type OrderDetailDto, type OrderStatus,
-  type OrderSummaryDto, type Unit, checkPickup, checkStatusChange, formatQty, formatWa, hundredthsToDecimal,
+  type OrderSummaryDto, type Unit, canCancel, checkPickup, checkStatusChange, formatQty, formatWa, hundredthsToDecimal,
   lineTotal, localDate, localDayRange, notaNumber, paymentStatus, renderWhatsApp, toHundredths,
 } from "@lk/shared";
 import type postgres from "postgres";
@@ -179,6 +179,20 @@ export async function pickup(ctx: Ctx, id: string): Promise<OrderDetailDto> {
     if (!check.ok) throw badRequest(check.reason);
     await tx`update orders set status = 'diambil', taken_at = now(), updated_at = now() where id = ${id}`;
     await tx`insert into status_events (order_id, from_status, to_status, staff_id) values (${id}, ${o.status}, 'diambil', ${ctx.staff.id})`;
+  });
+  return getOrder(ctx, id);
+}
+
+export async function cancelOrder(ctx: Ctx, id: string, reason: string): Promise<OrderDetailDto> {
+  const sql = getSql();
+  await sql.begin(async (tx) => {
+    const o = await lockOrder(tx, ctx, id);
+    if (o.status === "batal") return;
+    const check = canCancel(o.status, ctx.staff.role);
+    if (!check.ok) throw badRequest(check.reason);
+    if (o.paid_total > 0) throw badRequest("Nota yang sudah ada pembayarannya belum bisa dibatalkan. Pengembalian dana menyusul di versi berikutnya.");
+    await tx`update orders set status = 'batal', cancelled_at = now(), cancel_reason = ${reason}, updated_at = now() where id = ${id}`;
+    await tx`insert into status_events (order_id, from_status, to_status, staff_id, note) values (${id}, ${o.status}, 'batal', ${ctx.staff.id}, ${reason})`;
   });
   return getOrder(ctx, id);
 }
