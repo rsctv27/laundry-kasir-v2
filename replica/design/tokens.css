@@ -1,17 +1,18 @@
 /* Dibuat otomatis dari tokens.json oleh build-tokens.mjs. Jangan diedit manual. */
 :root {
   --lk-bg: #ffffff;
-  --lk-surface: #f4f5f7;
+  --lk-surface: #f2f7fa;
   --lk-surface-raised: #ffffff;
-  --lk-border: #e1e4e9;
-  --lk-border-input: #848c97;
-  --lk-text: #15181d;
-  --lk-text-muted: #565f6b;
-  --lk-accent: #1e2530;
-  --lk-accent-pressed: #353d49;
-  --lk-accent-soft: #e9ecf0;
+  --lk-border: #dbe4eb;
+  --lk-border-input: #7b8893;
+  --lk-text: #13212b;
+  --lk-text-muted: #4f5f6b;
+  --lk-accent: #0b6fa4;
+  --lk-accent-pressed: #085a87;
+  --lk-accent-soft: #e1f0f8;
   --lk-on-accent: #ffffff;
-  --lk-focus: #2456c9;
+  --lk-on-accent-muted: #d9ecf7;
+  --lk-focus: #0b6fa4;
   --lk-danger: #b8322a;
   --lk-danger-soft: #fdecea;
   --lk-on-danger: #ffffff;
@@ -19,8 +20,8 @@
   --lk-success-soft: #e5f4ec;
   --lk-warning: #8f5300;
   --lk-warning-soft: #fdf1dc;
-  --lk-info: #2456c9;
-  --lk-info-soft: #e8eefc;
+  --lk-info: #0b6fa4;
+  --lk-info-soft: #e1f0f8;
   --lk-series-1: #2a78d6;
   --lk-series-2: #eb6834;
   --lk-font-sans: Inter Variable, Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;

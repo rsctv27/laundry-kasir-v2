@@ -14,7 +14,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <SessionProvider>
         <DraftProvider>
-          <StatusBar style="dark" />
+          <StatusBar style="light" />
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: c.surface } }} />
         </DraftProvider>
       </SessionProvider>

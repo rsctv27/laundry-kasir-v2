@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: { default: "laundry-kasir", template: "%s · laundry-kasir" },
   description: "Kasir dan pembukuan untuk usaha laundry.",
 };
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0b6fa4" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

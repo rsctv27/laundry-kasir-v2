@@ -11,7 +11,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff",
+        "backgroundColor": "#0b6fa4",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -23,7 +23,7 @@
       "favicon": "./assets/favicon.png",
       "output": "single",
       "lang": "id",
-      "themeColor": "#ffffff",
+      "themeColor": "#0b6fa4",
       "description": "Catat cucian masuk, pembayaran, dan nota laundry."
     },
     "plugins": [

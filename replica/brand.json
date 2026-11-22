@@ -1,6 +1,16 @@
 {
-  "_about": "Identitas aplikasi asli yang tidak boleh ikut terbawa. Warna: tidak ada yang diambil (UI asli tidak pernah dilihat; accent masih tinta netral).",
-  "avoid": ["Smartlink", "Smartlink Bos", "Smartlink Kasir"],
-  "domains": ["smartlink.id"],
-  "colors": []
+  "_about": "Identitas aplikasi asli yang tidak boleh ikut terbawa. Warna diambil dari halaman publik smartlink.id (tombol #1548aa, latar #eef4ff, tombol chat #1a56cb) hanya untuk dihindari.",
+  "avoid": [
+    "Smartlink",
+    "Smartlink Bos",
+    "Smartlink Kasir"
+  ],
+  "domains": [
+    "smartlink.id"
+  ],
+  "colors": [
+    "#1548aa",
+    "#eef4ff",
+    "#1a56cb"
+  ]
 }

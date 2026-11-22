@@ -1,5 +1,5 @@
 // Komponen dasar aplikasi kasir, mengikuti replica/design/components.md. Semua nilai dari theme.gen.ts.
-import { Check, type LucideIcon } from "lucide-react-native";
+import { Check, WashingMachine, type LucideIcon } from "lucide-react-native";
 import { forwardRef, useState } from "react";
 import {
   ActivityIndicator, Platform, Pressable, StyleSheet, Text, TextInput, View,
@@ -66,7 +66,10 @@ export function Button({
   );
 }
 
-export function IconButton({ icon: Icon, label, variant = "ghost", disabled, ...rest }: PressableProps & { icon: LucideIcon; label: string; variant?: "ghost" | "secondary" }) {
+export function IconButton({
+  icon: Icon, label, variant = "ghost", tone = "default", disabled, ...rest
+}: PressableProps & { icon: LucideIcon; label: string; variant?: "ghost" | "secondary"; tone?: "default" | "onAccent" }) {
+  const onAccent = tone === "onAccent";
   return (
     <Pressable
       accessibilityRole="button"
@@ -76,12 +79,28 @@ export function IconButton({ icon: Icon, label, variant = "ghost", disabled, ...
       style={({ pressed }) => [
         s.iconBtn,
         variant === "secondary" && { backgroundColor: c["surface-raised"], borderWidth: 1, borderColor: c.border },
-        pressed && { backgroundColor: c["accent-soft"] },
+        pressed && { backgroundColor: onAccent ? c["accent-pressed"] : c["accent-soft"] },
       ]}
       {...rest}
     >
-      <Icon size={22} color={disabled ? c["border-input"] : c.text} />
+      <Icon size={22} color={disabled ? c["border-input"] : onAccent ? c["on-accent"] : c.text} />
     </Pressable>
+  );
+}
+
+/** Tanda aplikasi: kotak biru dengan mesin cuci putih. `inverse` untuk di atas latar biru. */
+export function AppMark({ size = 40, inverse = false }: { size?: number; inverse?: boolean }) {
+  return (
+    <View
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+      style={{
+        width: size, height: size, borderRadius: Math.round(size * 0.28), alignItems: "center", justifyContent: "center",
+        backgroundColor: inverse ? c["on-accent"] : c.accent,
+      }}
+    >
+      <WashingMachine size={Math.round(size * 0.6)} color={inverse ? c.accent : c["on-accent"]} strokeWidth={2} />
+    </View>
   );
 }
 

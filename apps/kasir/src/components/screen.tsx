@@ -1,4 +1,4 @@
-// Kerangka layar: header 56px, area isi, bilah aksi bawah. Sesuai components.md (AppHeader, ActionBar).
+// Kerangka layar: header biru 56px, area isi, bilah aksi bawah. Sesuai components.md (AppHeader, ActionBar).
 import { router } from "expo-router";
 import { ChevronLeft, type LucideIcon } from "lucide-react-native";
 import { ScrollView, StyleSheet, View, type ScrollViewProps } from "react-native";
@@ -14,15 +14,15 @@ export function AppHeader({
   return (
     <View style={[st.header, { paddingTop: insets.top, height: theme.layout.kasir.header + insets.top }]}>
       {back ? (
-        <IconButton icon={ChevronLeft} label="Kembali" onPress={typeof back === "function" ? back : () => (router.canGoBack() ? router.back() : router.replace("/"))} />
+        <IconButton tone="onAccent" icon={ChevronLeft} label="Kembali" onPress={typeof back === "function" ? back : () => (router.canGoBack() ? router.back() : router.replace("/"))} />
       ) : (
         <View style={{ width: sp(2) }} />
       )}
       <View style={{ flex: 1, minWidth: 0, paddingLeft: back ? 0 : sp(2) }}>
-        <Txt variant="lg" numberOfLines={1} accessibilityRole="header">{title}</Txt>
-        {subtitle && <Txt variant="xs" color="text-muted" numberOfLines={1}>{subtitle}</Txt>}
+        <Txt variant="lg" color="on-accent" numberOfLines={1} accessibilityRole="header">{title}</Txt>
+        {subtitle && <Txt variant="xs" color="on-accent-muted" numberOfLines={1}>{subtitle}</Txt>}
       </View>
-      {actions?.map((a) => <IconButton key={a.label} icon={a.icon} label={a.label} onPress={a.onPress} />)}
+      {actions?.map((a) => <IconButton key={a.label} tone="onAccent" icon={a.icon} label={a.label} onPress={a.onPress} />)}
     </View>
   );
 }
@@ -51,7 +51,8 @@ export function ActionBar({ children, width = "content" }: { children: React.Rea
 }
 
 const st = StyleSheet.create({
-  header: { flexDirection: "row", alignItems: "center", gap: sp(1), paddingRight: sp(2), paddingLeft: sp(1), backgroundColor: c["surface-raised"], borderBottomWidth: 1, borderBottomColor: c.border },
+  // Header biru dengan teks putih: identitas biru-putih aplikasi.
+  header: { flexDirection: "row", alignItems: "center", gap: sp(1), paddingRight: sp(2), paddingLeft: sp(1), backgroundColor: c.accent },
   body: { flex: 1, backgroundColor: c.surface, padding: sp(4), gap: sp(4) },
   bodyContent: { padding: sp(4), gap: sp(4), paddingBottom: sp(8) },
   actionWrap: { backgroundColor: c["surface-raised"], borderTopWidth: 1, borderTopColor: c.border, justifyContent: "center" },

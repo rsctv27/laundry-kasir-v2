@@ -14,6 +14,7 @@
   --color-accent-pressed: var(--lk-accent-pressed);
   --color-accent-soft: var(--lk-accent-soft);
   --color-on-accent: var(--lk-on-accent);
+  --color-on-accent-muted: var(--lk-on-accent-muted);
   --color-focus: var(--lk-focus);
   --color-danger: var(--lk-danger);
   --color-danger-soft: var(--lk-danger-soft);

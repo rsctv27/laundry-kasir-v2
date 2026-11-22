@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import { useRef, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, type TextInputInstance, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Banner, Button, c, Field, sp, Txt } from "@/components/ui";
+import { AppMark, Banner, Button, c, Field, sp, Txt } from "@/components/ui";
 import { RequestError } from "@/lib/api";
 import { useSession } from "@/lib/session";
 import { getItem, setItem } from "@/lib/storage";
@@ -41,13 +41,22 @@ export default function Masuk() {
     }
   }
 
+  const formWidth = { width: "100%" as const, maxWidth: theme.layout.kasir.form_max, alignSelf: "center" as const };
   return (
     <KeyboardAvoidingView style={{ flex: 1, backgroundColor: c.surface }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: "center", padding: sp(4), paddingTop: insets.top + sp(6), gap: sp(5), width: "100%", maxWidth: theme.layout.kasir.form_max, alignSelf: "center" }} keyboardShouldPersistTaps="handled">
-        <View style={{ gap: sp(1) }}>
-          <Txt variant="xl" accessibilityRole="header">Masuk kasir</Txt>
-          <Txt color="text-muted">Pakai kode usaha dan akun yang dibuat pemilik.</Txt>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: sp(8) }} keyboardShouldPersistTaps="handled">
+        {/* Pita biru di atas: tanda aplikasi dan judul, teks putih. */}
+        <View style={{ backgroundColor: c.accent, paddingTop: insets.top + sp(8), paddingBottom: sp(10), paddingHorizontal: sp(4) }}>
+          <View style={[formWidth, { gap: sp(3) }]}>
+            <AppMark size={48} inverse />
+            <View style={{ gap: sp(1) }}>
+              <Txt variant="xl" color="on-accent" accessibilityRole="header">Masuk kasir</Txt>
+              <Txt color="on-accent-muted">Pakai kode usaha dan akun yang dibuat pemilik.</Txt>
+            </View>
+          </View>
         </View>
+        <View style={{ paddingHorizontal: sp(4), marginTop: -sp(7) }}>
+          <View style={[formWidth, { gap: sp(5), padding: sp(5), backgroundColor: c["surface-raised"], borderRadius: theme.radius.lg, borderWidth: 1, borderColor: c.border }]}>
         {error && <Banner tone="danger" text={error} />}
         <View style={{ gap: sp(4) }}>
           <Field
@@ -85,6 +94,8 @@ export default function Masuk() {
           />
         </View>
         <Button label="Masuk" size="lg" onPress={submit} loading={loading} disabled={!canSubmit} />
+          </View>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

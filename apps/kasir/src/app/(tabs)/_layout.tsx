@@ -16,6 +16,8 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: c.accent,
         tabBarInactiveTintColor: c["text-muted"],
+        // Menu samping (layar lebar): item aktif diberi latar biru muda.
+        tabBarActiveBackgroundColor: wide ? c["accent-soft"] : undefined,
         // HP: bilah bawah. Browser desktop / tablet lebar: menu samping dengan label di sebelah ikon.
         tabBarPosition: wide ? "left" : "bottom",
         tabBarVariant: wide ? "material" : "uikit",
