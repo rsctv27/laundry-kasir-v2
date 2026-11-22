@@ -10,6 +10,11 @@ import { fileURLToPath } from "node:url";
 const webDir = join(dirname(fileURLToPath(import.meta.url)), "..");
 const run = (cmd, args, opts = {}) => execFileSync(cmd, args, { cwd: webDir, stdio: "inherit", ...opts });
 
+if (process.env.VERCEL && (process.env.BETTER_AUTH_SECRET ?? "").length < 32) {
+  console.error("BETTER_AUTH_SECRET belum diisi (minimal 32 karakter) di Environment Variables Vercel. Build dihentikan.");
+  process.exit(1);
+}
+
 if (process.env.SKIP_MIGRATE !== "1") {
   // Migrasi lewat koneksi langsung (bukan pooler) bila tersedia.
   const url = process.env.MIGRATE_DATABASE_URL || process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
