@@ -58,3 +58,15 @@ Unggah isi `dist/` ke hosting statis apa pun (Vercel, Netlify, Cloudflare Pages)
 - Di HP: buka alamatnya di Chrome, menu ⋮ > **Tambahkan ke layar utama**.
 - Di komputer: buka di Chrome/Edge, klik ikon **Instal** di bilah alamat. Aplikasi terbuka di jendela sendiri seperti aplikasi desktop.
 - Cetak nota: tombol **Cetak** membuka dialog cetak browser. Pasang driver printer thermal di komputer, pilih printer itu, dan samakan ukuran kertas (58/80 mm) dengan pengaturan di **Lainnya > Printer**.
+
+## Deploy (uji coba)
+
+Satu proyek Vercel menyajikan web pemilik, API, dan kasir versi web di `/kasir`. Langkah lengkap, env vars, dan hasil
+preflight: `replica/deploy.md`.
+
+```bash
+cd apps/web
+SKIP_MIGRATE=1 node scripts/vercel-build.mjs   # build seperti di Vercel, tanpa migrasi
+npx next start -p 3000                          # buka http://localhost:3000/kasir
+WEB_URL=http://localhost:3000 python3 ../kasir/e2e/first_run.py
+```
